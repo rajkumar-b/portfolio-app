@@ -7,11 +7,15 @@ files:
 hooks:
   BeforeInstall:
     - location: scripts/install-dependencies.sh
+      timeout: 300
       runas: root
+      permissions: +x  # Add executable permissions
 
   ApplicationStart:
     - location: scripts/start-server.sh
+      timeout: 300
       runas: ec2-user
+      permissions: +x  # Add executable permissions
 
 permissions:
   - object: /var/www/html
