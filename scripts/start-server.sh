@@ -17,7 +17,7 @@ sudo killall http-server
 
 # start the server in background and disown
 LOG_FILE=/home/ec2-user/http-server.log
-sudo nohup ~/.npm-global/bin/http-server dist -p 80 > $LOG_FILE 2>&1 &
+sudo nohup ~/.npm-global/bin/http-server dist -p 80 -d false --hostname www.rajkumar.app > $LOG_FILE 2>&1 &
 disown
 
 # echo success
