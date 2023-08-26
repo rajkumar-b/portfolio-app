@@ -10,6 +10,11 @@ npm install
 # Install three js in case not installed
 npm install three
 
+# make a directory for global installs
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+export PATH=~/.npm-global/bin:$PATH
+
 # Install Vite
 npm install -g vite@latest
 
