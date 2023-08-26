@@ -15,8 +15,9 @@ npm run build
 # stop the server if already running
 sudo killall http-server
 
-# start the server in background
-sudo ~/.npm-global/bin/http-server dist -p 80 &
+# start the server in background and disown
+sudo ~/.npm-global/bin/http-server dist -p 80 > /var/log/http-server.log 2>&1 &
+disown
 
 # echo success
 echo "success"
