@@ -10,7 +10,7 @@ fi
 cd /var/www/html/portfolio-app
 
 # Build app
-npm run build
+sudo npm run build
 
 # start the server
-http-server dist -p 80
+sudo http-server dist -p 80
