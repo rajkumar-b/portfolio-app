@@ -9,5 +9,8 @@ fi
 # Change to the project directory
 cd /var/www/html/portfolio-app
 
-# Start the Three.js server 
-npm run dev -- --port 80
+# Build app
+npm run build
+
+# start the server
+http-server dist -p 80
