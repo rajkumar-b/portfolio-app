@@ -13,4 +13,4 @@ cd /var/www/html/portfolio-app
 npm run build
 
 # start the server
-~/.npm-global/bin/http-server dist -p 80
+sudo ~/.npm-global/bin/http-server dist -p 80
