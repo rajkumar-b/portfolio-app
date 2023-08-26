@@ -11,4 +11,13 @@ npm install
 npm install three
 
 # Install Vite
-npm install -g create-vite
+npm install -g vite@latest
+
+# Build app
+npm run build
+
+# Install node build-in server
+npm install -g http-server
+
+# start the server
+http-server dist -p 80
