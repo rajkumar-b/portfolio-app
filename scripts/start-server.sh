@@ -12,6 +12,9 @@ cd /var/www/html/portfolio-app
 # Build app
 npm run build
 
+# stop the server if already running
+sudo killall http-server
+
 # start the server in background
 sudo ~/.npm-global/bin/http-server dist -p 80 &
 
