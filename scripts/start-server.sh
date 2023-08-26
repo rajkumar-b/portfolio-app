@@ -7,7 +7,7 @@ if sudo systemctl is-active httpd &> /dev/null; then
 fi
 
 # Change to the project directory
-cd /var/www/html
+cd /var/www/html/portfolio-app
 
 # Start your Three.js server (replace with your actual command)
 npm start
