@@ -16,7 +16,8 @@ npm run build
 sudo killall http-server
 
 # start the server in background and disown
-sudo ~/.npm-global/bin/http-server dist -p 80 > /var/log/http-server.log 2>&1 &
+LOG_FILE=/home/ec2-user/http-server.log
+sudo nohup ~/.npm-global/bin/http-server dist -p 80 > $LOG_FILE 2>&1 &
 disown
 
 # echo success
