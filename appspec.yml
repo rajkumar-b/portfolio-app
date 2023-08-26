@@ -11,6 +11,12 @@ hooks:
       runas: ec2-user
       permissions: +x  # Add executable permissions
 
+  Install:
+    - location: scripts/install-packages.sh
+      timeout: 600
+      runas: ec2-user
+      permissions: +x  # Add executable permissions
+
   ApplicationStart:
     - location: scripts/start-server.sh
       timeout: 300

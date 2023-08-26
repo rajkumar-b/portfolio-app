@@ -29,7 +29,8 @@ VC house for the site: rajkumar.app
 4. Go to httpd config directory using: `cd /etc/httpd/conf.d/`
 5. Create a config with same name as your git repo: `sudo nano <git-repo-name>.conf`
 6. Paste the following code by modifying necessary parameters:
-```<VirtualHost *:80>
+```
+<VirtualHost *:80>
     ServerName 10.123.15.21; # replace with your ec2 public ipv4 address
     DocumentRoot /var/www/html/your-repo # replace with your repo name
 
@@ -41,7 +42,8 @@ VC house for the site: rajkumar.app
 
     ErrorLog /var/log/httpd/your-repo-error.log
     CustomLog /var/log/httpd/your-repo-access.log combined
-</VirtualHost>```
+</VirtualHost>
+``` 
 7. write out the file using CTRL+O and exit using CTRL+X
 8. Test config for syntax errors using `sudo apachectl configtest`
 9. Reload the httpd server using `sudo systemctl reload httpd` and visit your ec2's public-ipv4-dns address to view the site
@@ -54,5 +56,3 @@ VC house for the site: rajkumar.app
 4. Choose your own note, expiration date but make sure to give full access to 'repo' (check all sub categories)
 5. Generate token and copy/note the displayed token (Token will disappear if navigated outside and have to generate again in that case)
 6. In your httpd location, use the command `sudo git clone https://<github-handle>:<your-generated-token>@github.com/<github-handle>/<github-repo-name>.git`
-
-
