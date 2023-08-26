@@ -9,19 +9,34 @@ hooks:
     - location: scripts/install-dependencies.sh
       timeout: 300
       runas: ec2-user
-      permissions: +x  # Add executable permissions
+      permissions:
+        - object: /var/www/html/portfolio-app/scripts
+          pattern: "*.sh"
+          owner: ec2-user
+          group: ec2-user
+          mode: 755
 
   Install:
     - location: scripts/install-packages.sh
       timeout: 600
       runas: ec2-user
-      permissions: +x  # Add executable permissions
+      permissions:
+        - object: /var/www/html/portfolio-app/scripts
+          pattern: "*.sh"
+          owner: ec2-user
+          group: ec2-user
+          mode: 755
 
   ApplicationStart:
     - location: scripts/start-server.sh
       timeout: 300
       runas: ec2-user
-      permissions: +x  # Add executable permissions
+      permissions:
+        - object: /var/www/html/portfolio-app/scripts
+          pattern: "*.sh"
+          owner: ec2-user
+          group: ec2-user
+          mode: 755
 
 permissions:
   - object: /var/www/html/portfolio-app/scripts
@@ -30,12 +45,12 @@ permissions:
     group: ec2-user
     mode: 755
   - object: /var/www/html/portfolio-app
-    pattern: "**/*"
+    pattern: "*"
     owner: ec2-user
     group: ec2-user
     mode: 766
   - object: /var/www/html
-    pattern: "**/*"
+    pattern: "*"
     owner: ec2-user
     group: ec2-user
     mode: 766
