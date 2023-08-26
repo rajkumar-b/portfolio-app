@@ -9,3 +9,6 @@ npm install
 
 # Install three js in case not installed
 npm install three
+
+# Install Vite
+npm install -g create-vite
