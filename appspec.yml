@@ -33,7 +33,7 @@ hooks:
           group: ec2-user
           mode: 755
 
-  Install:
+  AfterInstall:
     - location: scripts/install-packages.sh
       timeout: 600
       runas: ec2-user
