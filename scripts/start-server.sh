@@ -12,5 +12,8 @@ cd /var/www/html/portfolio-app
 # Build app
 npm run build
 
-# start the server
-sudo ~/.npm-global/bin/http-server dist -p 80
+# start the server in background
+sudo ~/.npm-global/bin/http-server dist -p 80 &
+
+# echo success
+echo "success"
