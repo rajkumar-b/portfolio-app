@@ -5,13 +5,13 @@
 cd /var/www/html/portfolio-app
 
 # Install project dependencies using npm
-npm install
+sudo npm install
 
 # Install three js in case not installed
-npm install three
+sudo npm install three
 
 # Install Vite
-npm install -g vite@latest
+sudo npm install -g vite@latest
 
 # Install node built-in server
-npm install -g http-server
+sudo npm install -g http-server
