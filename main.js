@@ -1,6 +1,7 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import space_bg from './images/space.jpg'
 
 // Create three main componenets: scene, camera and renderer
 const scene = new THREE.Scene();
@@ -54,7 +55,7 @@ function addStar(){
 Array(200).fill().forEach(addStar);
 
 // Add a space backgroud as the texture to the scene
-const spaceTexture = new THREE.TextureLoader().load('space.jpg');
+const spaceTexture = new THREE.TextureLoader().load(space_bg);
 scene.background = spaceTexture;
 
 // Add orbit controls
