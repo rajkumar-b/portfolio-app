@@ -1,5 +1,6 @@
-import './style.css'
-import * as THREE from 'three'
+import './style.css';
+import * as THREE from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 // Create three main componenets: scene, camera and renderer
 const scene = new THREE.Scene();
@@ -37,6 +38,8 @@ scene.add(lightHelper);
 const gridHelper = new THREE.GridHelper(200, 50);
 scene.add(gridHelper);
 
+// Add orbit controls
+const controls = new OrbitControls(camera, renderer.domElement);
 
 // Render the scene
 function animate(){
@@ -45,6 +48,7 @@ function animate(){
   torus.rotation.y += 0.005;
   torus.rotation.z += 0.01;
   renderer.render(scene, camera);
+  controls.update();
 }
 
 animate();
