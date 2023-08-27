@@ -38,6 +38,20 @@ scene.add(lightHelper);
 const gridHelper = new THREE.GridHelper(200, 50);
 scene.add(gridHelper);
 
+// Add some stars to the scene
+function addStar(){
+  const starGeometry = new THREE.SphereGeometry(0.25, 24, 24);
+  const starMaterial = new THREE.MeshStandardMaterial({color:0xFFFFFF});
+  const star = new THREE.Mesh(starGeometry, starMaterial);
+
+  const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+  star.position.set(x,y,z);
+  
+  scene.add(star);
+}
+
+Array(200).fill().forEach(addStar);
+
 // Add orbit controls
 const controls = new OrbitControls(camera, renderer.domElement);
 
