@@ -50,7 +50,12 @@ function addStar(){
   scene.add(star);
 }
 
+// Populate stars on the scene
 Array(200).fill().forEach(addStar);
+
+// Add a space backgroud as the texture to the scene
+const spaceTexture = new THREE.TextureLoader().load('space.jpg');
+scene.background = spaceTexture;
 
 // Add orbit controls
 const controls = new OrbitControls(camera, renderer.domElement);
