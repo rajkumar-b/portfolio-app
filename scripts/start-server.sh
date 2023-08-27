@@ -17,7 +17,8 @@ sudo killall http-server
 
 # start the server in background and disown
 LOG_FILE=/home/ec2-user/http-server.log
-sudo nohup ~/.npm-global/bin/http-server dist -p 80 -d false --hostname www.rajkumar.app > $LOG_FILE 2>&1 &
+sudo nohup ~/.npm-global/bin/http-server dist -p 80 -d false --hostname rajkumar.app > $LOG_FILE 2>&1 & \
+sudo nohup ~/.npm-global/bin/http-server dist -p 443 --ssl --cert /etc/letsencrypt/live/rajkumar.app/cert.pem --key /etc/letsencrypt/live/rajkumar.app/privkey.pem -d false --hostname rajkumar.app > $LOG_FILE 2>&1 & \
 disown
 
 # echo success
