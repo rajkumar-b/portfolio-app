@@ -35,4 +35,4 @@ Once get the ARN value for this connection and replace this value in tfvars vari
 3. Verify if key files (.pem and .pub) are present in specified path
 4. From any local terminal, check connection to ec2 instance using the command: `ssh -i "<location-to-keypairfile>/<filename>.pem" ec2-user@<public-ipv4-dns-of-ec2-instance>`
 5. Go to the public ip address (only http, not https) to check the website rendered
-5. To destroy all resources, use `terraform destroy -var-file varfile.tfvars`
+6. To destroy all resources, use `terraform destroy -var-file varfile.tfvars`
