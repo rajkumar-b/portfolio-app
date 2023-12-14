@@ -87,6 +87,16 @@ web_modules/
 .next
 out
 
+# Terraform file exclusions
+.terraform
+.terraform.lock.hcl
+*prod.tfvars
+*test.tfvars
+*dev.tfvars
+.ssh-keys
+*.tfstate
+*.tfstate.backup
+
 # Nuxt.js build / generate output
 .nuxt
 dist
