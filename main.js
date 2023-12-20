@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
 const space_bg = './res/images/space.jpg';
-const uss_dae = './res/model/uss-enterprise-2009/model.dae';
+const uss_dae = './res/models/uss-enterprise-2009/model.dae';
 
 // Create three main componenets: scene, camera and renderer
 const scene = new THREE.Scene();
