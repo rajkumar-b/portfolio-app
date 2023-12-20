@@ -1,11 +1,13 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import space_bg from './images/space.jpg'
+import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
+const space_bg = './res/images/space.jpg';
+const uss_dae = './res/model/uss-enterprise-2009/model.dae';
 
 // Create three main componenets: scene, camera and renderer
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg')
 });
@@ -15,15 +17,33 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // move camera position to Z axis and a bit top
-camera.position.setZ(30);
+camera.position.setZ(200);
+camera.position.setX(0);
+camera.position.setY(100);
 
-// Create three main components to add a figure: geometry, material and mesh
-const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
-const material = new THREE.MeshStandardMaterial({color: 0xFF6347});
-const torus = new THREE.Mesh(geometry, material);
 
-// Add this figure to the scene
-scene.add(torus);
+// Create a ColladaLoader instance
+const loader = new ColladaLoader();
+
+// Load the DAE file
+loader.load(uss_dae, (collada) => {
+    const model = collada.scene; 
+    model.traverse((child) => {
+      if (child.type == 'LineSegments') {
+        child.visible = false;
+      }
+    });
+
+     // Move model to center
+     const bbox = new THREE.Box3().setFromObject(model);
+     const center = new THREE.Vector3();
+     bbox.getCenter(center);
+     const offset = new THREE.Vector3(0, 0, 0).sub(center);
+     model.position.add(offset);
+    
+    scene.add(model);
+});
+
 
 // Add a light to the scene
 const pointLight = new THREE.PointLight(0xFFFFFF);
@@ -34,10 +54,6 @@ scene.add(pointLight, ambientLight);
 // Add a lighthelper to view pointlight position
 const lightHelper = new THREE.PointLightHelper(pointLight);
 scene.add(lightHelper);
-
-// Add a gridhelper to view overall positions
-const gridHelper = new THREE.GridHelper(200, 50);
-scene.add(gridHelper);
 
 // Add some stars to the scene
 function addStar(){
@@ -64,9 +80,6 @@ const controls = new OrbitControls(camera, renderer.domElement);
 // Render the scene
 function animate(){
   requestAnimationFrame(animate);
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.005;
-  torus.rotation.z += 0.01;
   renderer.render(scene, camera);
   controls.update();
 }
