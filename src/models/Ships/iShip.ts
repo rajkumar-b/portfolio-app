@@ -7,6 +7,5 @@ interface iShip {
   moveLeft: () => void;
   moveRight: () => void;
 }
-  
+
 export { iShip };
-  

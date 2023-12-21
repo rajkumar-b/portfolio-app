@@ -12,6 +12,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "joystick-controller": "^1.0.15",
     "three": "^0.155.0",
     "vite-plugin-static-copy": "^0.17.0"
   }
