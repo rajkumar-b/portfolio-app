@@ -1,7 +1,7 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import { USSEnterprise2009 } from './src/models/uss-enterprise-2009';
+import { USSEnterprise2009 } from './src/models/Ships/uss-enterprise-2009';
 import { centerModel, attachMovements } from './src/utilities';
 const space_bg = './res/images/space.jpg';
 
@@ -21,17 +21,16 @@ camera.position.setZ(200);
 camera.position.setX(0);
 camera.position.setY(100);
 
-let playerShip = null;
-const enterprise = new USSEnterprise2009();
-enterprise.loadModel(scene)
+const playerShip = new USSEnterprise2009();
+playerShip.loadModel(scene)
 .then((model) => {
-  playerShip = model;
-  centerModel(playerShip);
-  attachMovements(playerShip);
+  centerModel(model);
 })
 .catch((error) => {
   console.error('Error loading model:', error);
 });
+
+attachMovements(playerShip);
 
 
 // Add a light to the scene
@@ -50,14 +49,14 @@ function addStar(){
   const starMaterial = new THREE.MeshStandardMaterial({color:0xFFFFFF});
   const star = new THREE.Mesh(starGeometry, starMaterial);
 
-  const [x,y,z] = Array(3).fill().map(() => THREE.MathUtils.randFloatSpread(100));
+  const [x,y,z] = Array(3).fill(0).map(() => THREE.MathUtils.randFloatSpread(100));
   star.position.set(x,y,z);
   
   scene.add(star);
 }
 
 // Populate stars on the scene
-Array(200).fill().forEach(addStar);
+Array(200).fill(0).forEach(addStar);
 
 // Add a space backgroud as the texture to the scene
 const spaceTexture = new THREE.TextureLoader().load(space_bg);
