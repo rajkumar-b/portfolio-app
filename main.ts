@@ -2,7 +2,7 @@ import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import { USSEnterprise2009 } from './src/models/Ships/uss-enterprise-2009';
-import { centerModel, attachMovements } from './src/utilities';
+import { centerModel, attachMovements, includeJoystick } from './src/utilities';
 const space_bg = './res/images/space.jpg';
 
 // Create three main componenets: scene, camera and renderer
@@ -31,7 +31,8 @@ playerShip.loadModel(scene)
 });
 
 attachMovements(playerShip);
-
+const staticJoystick = includeJoystick();
+// staticJoystick.destroy(); // To remove joystick
 
 // Add a light to the scene
 const pointLight = new THREE.PointLight(0xFFFFFF);
