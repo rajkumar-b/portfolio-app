@@ -1,9 +1,9 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
+import { USSEnterprise2009 } from './src/models/uss-enterprise-2009';
+import { centerModel, attachMovements } from './src/utilities';
 const space_bg = './res/images/space.jpg';
-const uss_dae = './res/models/uss-enterprise-2009/model.dae';
 
 // Create three main componenets: scene, camera and renderer
 const scene = new THREE.Scene();
@@ -21,27 +21,16 @@ camera.position.setZ(200);
 camera.position.setX(0);
 camera.position.setY(100);
 
-
-// Create a ColladaLoader instance
-const loader = new ColladaLoader();
-
-// Load the DAE file
-loader.load(uss_dae, (collada) => {
-    const model = collada.scene; 
-    model.traverse((child) => {
-      if (child.type == 'LineSegments') {
-        child.visible = false;
-      }
-    });
-
-     // Move model to center
-     const bbox = new THREE.Box3().setFromObject(model);
-     const center = new THREE.Vector3();
-     bbox.getCenter(center);
-     const offset = new THREE.Vector3(0, 0, 0).sub(center);
-     model.position.add(offset);
-    
-    scene.add(model);
+let playerShip = null;
+const enterprise = new USSEnterprise2009();
+enterprise.loadModel(scene)
+.then((model) => {
+  playerShip = model;
+  centerModel(playerShip);
+  attachMovements(playerShip);
+})
+.catch((error) => {
+  console.error('Error loading model:', error);
 });
 
 
