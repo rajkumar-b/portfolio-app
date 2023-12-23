@@ -1,7 +1,8 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import { USSEnterprise2009 } from './src/models/Ships/uss-enterprise-2009';
+import { USSEnterpriseTOSTWOK } from './src/models/Ships/uss-enterprise-tos-twok';
+import {BinarySystem } from './src/models/Planets/binary-system';
 import { centerModel, attachMovements, includeJoystick } from './src/utilities';
 const space_bg = './res/images/space.jpg';
 
@@ -11,6 +12,7 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHei
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg')
 });
+const mixers: THREE.AnimationMixer[] = []
 
 // set renderer pixel ratio as device and fit window to full screen
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -21,7 +23,7 @@ camera.position.setZ(200);
 camera.position.setX(0);
 camera.position.setY(100);
 
-const playerShip = new USSEnterprise2009();
+const playerShip = new USSEnterpriseTOSTWOK();
 playerShip.loadModel(scene)
 .then((model) => {
   centerModel(model);
@@ -33,6 +35,17 @@ playerShip.loadModel(scene)
 attachMovements(playerShip);
 const staticJoystick = includeJoystick();
 // staticJoystick.destroy(); // To remove joystick
+
+
+const binSystem = new BinarySystem();
+binSystem.loadModel(scene)
+.then(() => {
+  binSystem.loadAnimation(mixers);
+})
+.catch((error) => {
+  console.error('Error loading model:', error);
+});
+
 
 // Add a light to the scene
 const pointLight = new THREE.PointLight(0xFFFFFF);
@@ -66,11 +79,16 @@ scene.background = spaceTexture;
 // Add orbit controls
 const controls = new OrbitControls(camera, renderer.domElement);
 
+const clock = new THREE.Clock();
 // Render the scene
 function animate(){
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
   controls.update();
+  const delta = clock.getDelta();
+  Object.values(mixers).forEach( mixer => {
+    if (mixer) mixer.update(delta);
+  } ); 
 }
 
 animate();
