@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
 import { iShip } from './iShip'; 
-class USSEnterprise2009 implements iShip {
+
+class USSEnterpriseTOSTWOK implements iShip {
   uss_dae: string;
   loader: ColladaLoader;
   model: any;
 
   constructor() {
-    this.uss_dae = '../../res/models/uss-enterprise-2009/model.dae';
+    this.uss_dae = '../../res/models/Ships/uss-enterprise-tos-twok/model.dae';
     this.loader = new ColladaLoader();
     this.model = null;
   }
@@ -52,4 +53,4 @@ class USSEnterprise2009 implements iShip {
   }
 }
 
-export { USSEnterprise2009 };
+export { USSEnterpriseTOSTWOK};
