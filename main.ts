@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import { USSEnterpriseTOSTWOK } from './src/models/Ships/uss-enterprise-tos-twok';
 import {BinarySystem } from './src/models/Planets/binary-system';
-import { centerModel, attachMovements, includeJoystick } from './src/utilities';
+import { placeModel, attachMovements, includeJoystick } from './src/utilities';
 const space_bg = './res/images/space.jpg';
 
 // Create three main componenets: scene, camera and renderer
@@ -23,23 +23,27 @@ camera.position.setZ(200);
 camera.position.setX(0);
 camera.position.setY(100);
 
+// Create a player ship and add to scene
 const playerShip = new USSEnterpriseTOSTWOK();
 playerShip.loadModel(scene)
 .then((model) => {
-  centerModel(model);
+  placeModel(model, [0,0,0]);
 })
 .catch((error) => {
   console.error('Error loading model:', error);
 });
 
+// Add movements to ship and display a virtual joystick
 attachMovements(playerShip);
 const staticJoystick = includeJoystick();
 // staticJoystick.destroy(); // To remove joystick
 
 
+// Add a binary star system to the scene
 const binSystem = new BinarySystem();
 binSystem.loadModel(scene)
-.then(() => {
+.then((model) => {
+  placeModel(model, [500,500,500]);
   binSystem.loadAnimation(mixers);
 })
 .catch((error) => {

@@ -2,11 +2,11 @@ import * as THREE from 'three';
 import JoystickController from "joystick-controller";
 import { iShip } from './models/Ships/iShip';
 
-function centerModel(model: any) {
+function placeModel(model: any, coords: [number, number, number]) {
   const bbox = new THREE.Box3().setFromObject(model);
   const center = new THREE.Vector3();
   bbox.getCenter(center);
-  const offset = new THREE.Vector3(0, 0, 0).sub(center);
+  const offset = new THREE.Vector3(coords[0], coords[1], coords[2]).sub(center);
   model.position.add(offset);
 }
 
@@ -82,4 +82,4 @@ function attachMovements(model: iShip) {
   document.addEventListener('keydown', handleKeyPress);
 }
 
-export { centerModel, attachMovements, includeJoystick };
+export { placeModel, attachMovements, includeJoystick };
