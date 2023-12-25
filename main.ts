@@ -19,15 +19,23 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 // move camera position to Z axis and a bit top
-camera.position.setZ(200);
-camera.position.setX(0);
-camera.position.setY(100);
+const camOffset = new THREE.Vector3(0, 100, 200);
+camera.position.copy(camOffset);
+
+// Get initial delta values for camera and orbit control
+const currPlayerPos = new THREE.Vector3();
+const camDelta = new THREE.Vector3();
+camDelta.copy(camOffset);
+const orbDelta = new THREE.Vector3();
 
 // Create a player ship and add to scene
 const playerShip = new USSEnterpriseTOSTWOK();
 playerShip.loadModel(scene)
 .then((model) => {
   placeModel(model, [0,0,0]);
+  model.getWorldPosition(currPlayerPos);
+  camDelta.sub(currPlayerPos);
+  orbDelta.sub(currPlayerPos);
 })
 .catch((error) => {
   console.error('Error loading model:', error);
@@ -84,15 +92,32 @@ scene.background = spaceTexture;
 const controls = new OrbitControls(camera, renderer.domElement);
 
 const clock = new THREE.Clock();
+const movedPlayerPos = new THREE.Vector3();
 // Render the scene
 function animate(){
   requestAnimationFrame(animate);
-  renderer.render(scene, camera);
-  controls.update();
+
+  // On movement, update ship and camera
+  if (playerShip.model){
+    playerShip.model.getWorldPosition(movedPlayerPos);
+    if (! currPlayerPos.equals(movedPlayerPos)){
+      camera.position.copy(movedPlayerPos);
+      camera.position.add(camDelta);
+      controls.target.copy(movedPlayerPos);
+      controls.target.add(orbDelta);
+      currPlayerPos.copy(movedPlayerPos);
+    }
+  } 
+
+  // Play the animation from mixer
   const delta = clock.getDelta();
   Object.values(mixers).forEach( mixer => {
     if (mixer) mixer.update(delta);
   } ); 
+
+  // Render the updated scene
+  renderer.render(scene, camera);
+  controls.update(); 
 }
 
 animate();
