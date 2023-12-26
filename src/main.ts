@@ -1,9 +1,9 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import { USSEnterpriseTOSTWOK } from './src/models/Ships/uss-enterprise-tos-twok';
-import {BinarySystem } from './src/models/Planets/binary-system';
-import { placeModel, attachMovements, includeJoystick } from './src/utilities';
+import { USSEnterpriseTOSTWOK } from './models/Ships/uss-enterprise-tos-twok';
+import {BinarySystem } from './models/Planets/binary-system';
+import { placeModel, attachMovements, includeJoystick } from './utilities';
 const space_bg = './res/images/space.jpg';
 
 // Create three main componenets: scene, camera and renderer
