@@ -22,20 +22,34 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const camOffset = new THREE.Vector3(0, 100, 200);
 camera.position.copy(camOffset);
 
-// Get initial delta values for camera and orbit control
-const currPlayerPos = new THREE.Vector3();
-const camDelta = new THREE.Vector3();
-camDelta.copy(camOffset);
-const orbDelta = new THREE.Vector3();
+// Create a pivot element for camera to use in orbit controls
+const camPivot = camera.clone();
+scene.add(camPivot);
+
+
+// Add orbit controls
+const controls = new OrbitControls(camPivot, renderer.domElement);
+controls.autoRotate = false;
+controls.enablePan = false;
+controls.enableZoom = false; 
+controls.enableDamping = true;
+controls.minPolarAngle = 1.2;
+controls.maxPolarAngle = 1.6;
+controls.minAzimuthAngle = -0.2;
+controls.maxAzimuthAngle = 0.2;
+controls.dampingFactor = 0.2;
+controls.rotateSpeed = 0.2;
+
+// Add a space backgroud as the texture to the scene
+const spaceTexture = new THREE.TextureLoader().load(space_bg);
+scene.background = spaceTexture;
 
 // Create a player ship and add to scene
 const playerShip = new USSEnterpriseTOSTWOK();
-playerShip.loadModel(scene)
+playerShip.loadModel()
 .then((model) => {
-  placeModel(model, [0,0,0]);
-  model.getWorldPosition(currPlayerPos);
-  camDelta.sub(currPlayerPos);
-  orbDelta.sub(currPlayerPos);
+  scene.add(model);
+  model.add(camera);
 })
 .catch((error) => {
   console.error('Error loading model:', error);
@@ -84,32 +98,15 @@ function addStar(){
 // Populate stars on the scene
 Array(200).fill(0).forEach(addStar);
 
-// Add a space backgroud as the texture to the scene
-const spaceTexture = new THREE.TextureLoader().load(space_bg);
-scene.background = spaceTexture;
-
-// Add orbit controls
-const controls = new OrbitControls(camera, renderer.domElement);
-
-const clock = new THREE.Clock();
-const movedPlayerPos = new THREE.Vector3();
 // Render the scene
+const clock = new THREE.Clock();
+
 function animate(){
   requestAnimationFrame(animate);
+  // Update camera's pivot with camera's location
+  camPivot.getWorldPosition(camera.position); 
 
-  // On movement, update ship and camera
-  if (playerShip.model){
-    playerShip.model.getWorldPosition(movedPlayerPos);
-    if (! currPlayerPos.equals(movedPlayerPos)){
-      camera.position.copy(movedPlayerPos);
-      camera.position.add(camDelta);
-      controls.target.copy(movedPlayerPos);
-      controls.target.add(orbDelta);
-      currPlayerPos.copy(movedPlayerPos);
-    }
-  } 
-
-  // Play the animation from mixer
+  // Play the animation from mixer  
   const delta = clock.getDelta();
   Object.values(mixers).forEach( mixer => {
     if (mixer) mixer.update(delta);
