@@ -32,7 +32,6 @@ class BinarySystem {
                         child.visible = false;
                     }
                 });
-                console.log(this.model);
                 // Add model to scene object and return the model
                 scene.add(this.model);
                 resolve(this.model);

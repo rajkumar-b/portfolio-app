@@ -1,11 +1,8 @@
 import * as THREE from 'three';
+import { shipMovement } from './shipMovement';
 
-interface iShip {
-  loadModel: (scene: THREE.Scene) => Promise<any>;
-  moveForward: () => void;
-  moveBackward: () => void;
-  moveLeft: () => void;
-  moveRight: () => void;
+interface iShip extends shipMovement {
+  loadModel: () => Promise<THREE.Group>;
 }
 
 export { iShip };
