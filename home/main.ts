@@ -4,7 +4,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import { USSEnterpriseTOSTWOK } from './models/Ships/uss-enterprise-tos-twok';
 import {BinarySystem } from './models/Planets/binary-system';
 import { placeModel, attachMovements, includeJoystick } from './utilities';
-const space_bg = './res/images/space.jpg';
+const space_bg = '../res/images/space.jpg';
 
 // Create three main componenets: scene, camera and renderer
 const scene = new THREE.Scene();
