@@ -2,6 +2,7 @@
     "Education" : {
         "Traditional": [
             {
+                "_name": "Masters",
                 "year_start": 2021,
                 "year_end": 2023,
                 "type": "college",
@@ -15,6 +16,7 @@
                 "degree_abbr": "MS AI"
             },
             {
+                "_name": "Bachelors",
                 "year_start": 2010,
                 "year_end": 2014,
                 "type": "college",
