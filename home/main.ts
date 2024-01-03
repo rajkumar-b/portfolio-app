@@ -10,7 +10,7 @@ const space_bg = '../res/images/space.jpg';
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
 const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector('#bg')
+  canvas: document.querySelector('#bg')!
 });
 const mixers: THREE.AnimationMixer[] = []
 
