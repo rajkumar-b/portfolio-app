@@ -13,6 +13,7 @@
     "vite": "^4.4.5"
   },
   "dependencies": {
+    "3d-force-graph": "^1.73.0",
     "joystick-controller": "^1.0.15",
     "three": "^0.155.0",
     "vite-plugin-static-copy": "^0.17.0"
