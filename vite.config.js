@@ -5,6 +5,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
 export default defineConfig({
   base: './',
   build: {
+    target: "ES2022",
     rollupOptions: {
       input: {
         home: './index.html', 
