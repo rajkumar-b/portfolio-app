@@ -1,7 +1,7 @@
 import './style.css';
 import * as THREE from 'three';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
-import { getJSONdoc, jsonToGraph } from '../home/utilities';
+import { getJSONdoc, jsonToGraph } from './utilities';
 const portfolio_content_json = "../res/data/portfolio-content.json";
 
 // Create three main componenets: scene, camera and renderer
