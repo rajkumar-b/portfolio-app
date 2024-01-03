@@ -1,0 +1,34 @@
+{
+    "Education" : {
+        "Traditional": [
+            {
+                "year_start": 2021,
+                "year_end": 2023,
+                "type": "college",
+                "country": "US",
+                "state": "MA",
+                "City": "Boston",
+                "university": "Northeastern University",
+                "college": "Khoury College of Computer Sciences",
+                "degree": "Master of Science",
+                "specialization": "Artificial Intelligence",
+                "degree_abbr": "MS AI"
+            },
+            {
+                "year_start": 2010,
+                "year_end": 2014,
+                "type": "college",
+                "country": "India",
+                "state": "PY",
+                "City": "Puducherry",
+                "university": "Pondicherry University",
+                "college": "Pondicherry Engineering College",
+                "degree": "Bachelor of Technology",
+                "specialization": "Electronics and Communication Engineering",
+                "degree_abbr": "B.Tech (ECE)"
+            }
+        ],
+        "Online Courses": [],
+        "Self Taught": []
+    }
+}
