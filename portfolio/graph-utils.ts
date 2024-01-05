@@ -1,7 +1,11 @@
+import * as THREE from 'three';
 import { GraphData } from 'three-forcegraph';
 import { ForceGraph3DInstance } from '3d-force-graph';
 import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
+const graph_images = '../res/images/graph/portfolio/';
+const image3d_visible = new Set();
 
 function createEmptyGraph(): GraphData{
     return {
@@ -21,7 +25,23 @@ function createNodeObject(node: any): CSS2DObject{
     nodeEl.style.color = node.color;
     nodeEl.className = 'node-label';
     nodeEl.id = `node-${node.id}`;
-    return new CSS2DObject(nodeEl);
+    const nodeObj = new CSS2DObject(nodeEl);
+    if (node.type === 'img'){
+        const image = getImageSprite(graph_images + node.img);
+        image.visible = false;
+        nodeObj.add(image);
+        node.image3d = image;
+    }
+    return nodeObj;
+}
+
+function getImageSprite(imageLoc: string): THREE.Sprite{
+    const imgTexture = new THREE.TextureLoader().load(`${imageLoc}`);
+    imgTexture.colorSpace = THREE.SRGBColorSpace;
+    const material = new THREE.SpriteMaterial({ map: imgTexture });
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(12, 12, 12);
+    return sprite;
 }
 
 function hideClass(classname: string, hide:boolean = true, exceptions: string[] = []){
@@ -100,11 +120,18 @@ function handleNodeColorChange(node: any, highlightNodes: Set<any>, animation_co
     return colorToReturn;
 }
 
+function hideVisibleImages(){
+    if (image3d_visible.size) {
+        image3d_visible.forEach((imgObj: any) => {imgObj.visible=false;})
+    }
+}
+
 function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, animation_controls: any){
     setInterval(() => {
         if (animation_controls.is_rotation_active) {
             graph.enableNodeDrag(true);
             hideClass('node-label');
+            hideVisibleImages();
             orbit_control.enabled = false;
             if (!animation_controls.reset_needed){
                 graph.cameraPosition({
@@ -124,7 +151,7 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
                     setTimeout(() => {
                         animation_controls.node_unfocus_active = false;
                         animation_controls.reset_needed = false;
-                        // hideClass('node-label', false);
+                        // hideClass('node-label', false); hideVisibleImages();
                     }, 3000);
                 }
             }
@@ -142,12 +169,17 @@ function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3
         const newPos = node.x || node.y || node.z
             ? { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }
             : { x: 0, y: 0, z: distance }; 
-            graph.cameraPosition( newPos, node, 3000 );
+        graph.cameraPosition( newPos, node, 3000 );
+        hideVisibleImages();
         hideClass('node-label', true, [`node-${node.id}`]);
+        if (node.image3d){
+            node.image3d.visible = true;
+            image3d_visible.add(node.image3d);
+        }
         animation_controls.reset_needed = true;
     }
 }
 
-export {createEmptyGraph, addToGraph, createNodeObject, hideClass, crossLinkObjects,
+export {createEmptyGraph, addToGraph, createNodeObject, crossLinkObjects,
     highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
     focusNodeOnClick};
