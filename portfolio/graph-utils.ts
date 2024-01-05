@@ -78,43 +78,43 @@ function updateHighlight(graph: ForceGraph3DInstance) {
 }
 
 function highlightNodeOnHover(node: any, animation_controls: any, 
-    highlightNodes: Set<any>, highlightLinks: Set<any>, graph: ForceGraph3DInstance){
+    highlight_nodes: Set<any>, highlight_links: Set<any>, graph: ForceGraph3DInstance){
         
-        if ((!node && !highlightNodes.size) || (node && animation_controls.hoverNode === node)) return;
+        if ((!node && !highlight_nodes.size) || (node && animation_controls.hover_node === node)) return;
 
-        highlightNodes.clear();
-        highlightLinks.clear();
+        highlight_nodes.clear();
+        highlight_links.clear();
         if (node) {
-            highlightNodes.add(node);
-            node.neighbors.forEach((neighbor: any) => highlightNodes.add(neighbor));
-            node.links.forEach((link: any) => highlightLinks.add(link));
+            highlight_nodes.add(node);
+            node.neighbors.forEach((neighbor: any) => highlight_nodes.add(neighbor));
+            node.links.forEach((link: any) => highlight_links.add(link));
         }
 
-        animation_controls.hoverNode = node || null;
+        animation_controls.hover_node = node || null;
 
         updateHighlight(graph);
 }
 
-function highlightLinkOnHover(link: any, highlightNodes: Set<any>, highlightLinks: Set<any>, graph: ForceGraph3DInstance){
-    highlightNodes.clear();
-    highlightLinks.clear();
+function highlightLinkOnHover(link: any, highlight_nodes: Set<any>, highlight_links: Set<any>, graph: ForceGraph3DInstance){
+    highlight_nodes.clear();
+    highlight_links.clear();
   
     if (link) {
-      highlightLinks.add(link);
-      highlightNodes.add(link.source);
-      highlightNodes.add(link.target);
+        highlight_links.add(link);
+        highlight_nodes.add(link.source);
+        highlight_nodes.add(link.target);
     }
   
     updateHighlight(graph);
 }
 
-function handleNodeColorChange(node: any, highlightNodes: Set<any>, animation_controls: any): string{
+function handleNodeColorChange(node: any, highlight_nodes: Set<any>, animation_controls: any): string{
     let colorToReturn = node.color
-    if (highlightNodes.has(node)){ 
-        if (node === animation_controls.hoverNode) {
-            colorToReturn = animation_controls.highlightNodeColor;
+    if (highlight_nodes.has(node)){ 
+        if (node === animation_controls.hover_node) {
+            colorToReturn = animation_controls.highlight_color_main_node;
         } else {
-            colorToReturn = animation_controls.neighborNodeColor;
+            colorToReturn = animation_controls.highlight_color_neighbor_node;
         }
     } 
     return colorToReturn;

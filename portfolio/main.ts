@@ -7,7 +7,7 @@ import { getJSONdoc } from './utilities';
 import ForceGraph3D from '3d-force-graph';
 import { createEmptyGraph, addToGraph, createNodeObject, crossLinkObjects,
   highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
-  focusNodeOnClick   } from './graph-utils';
+  focusNodeOnClick } from './graph-utils';
 
 // const portfolio_content_json = "../res/data/portfolio-content.json";
 const portfolio_graph_framework = "../res/data/portfolio-graph/framework.json";
@@ -21,12 +21,12 @@ let animation_controls = {
   rot_distance: 250,
   rot_increment: Math.PI / 1000,
   rot_update_ms: 10,
-  hoverNode: null,
-  highlightNodeColor: 'rgb(255,0,0, 1)',
-  neighborNodeColor: 'rgba(255,160,0,0.8)',
+  hover_node: null,
+  highlight_color_main_node: 'rgb(255,0,0, 1)',
+  highlight_color_neighbor_node: 'rgba(255,160,0,0.8)',
 }
-const highlightNodes = new Set();
-const highlightLinks = new Set();
+const highlight_nodes = new Set();
+const highlight_links = new Set();
 
 
 // Get data for 3d graph
@@ -42,16 +42,16 @@ const portfolio_graph = ForceGraph3D({
 })(elem)
   .graphData(portfolio_graph_data)
   .backgroundColor('#000003')
-  .nodeColor(node => handleNodeColorChange(node, highlightNodes, animation_controls))
-  .linkWidth(link => highlightLinks.has(link) ? 4 : 1)
-  .linkDirectionalParticles(link => highlightLinks.has(link) ? 4 : 0)
+  .nodeColor(node => handleNodeColorChange(node, highlight_nodes, animation_controls))
+  .linkWidth(link => highlight_links.has(link) ? 4 : 1)
+  .linkDirectionalParticles(link => highlight_links.has(link) ? 4 : 0)
   .linkDirectionalParticleWidth(4)
   .nodeThreeObject(node => createNodeObject(node))
   .nodeThreeObjectExtend(true)
   .onNodeClick(node => focusNodeOnClick(node, animation_controls, portfolio_graph))
-  .onNodeHover(node => highlightNodeOnHover(node, animation_controls, highlightNodes, highlightLinks, portfolio_graph))
+  .onNodeHover(node => highlightNodeOnHover(node, animation_controls, highlight_nodes, highlight_links, portfolio_graph))
   .onNodeDragEnd((node: any) => { node.fx = node.x; node.fy = node.y; node.fz = node.z; })
-  .onLinkHover(link => highlightLinkOnHover(link, highlightNodes, highlightLinks, portfolio_graph));
+  .onLinkHover(link => highlightLinkOnHover(link, highlight_nodes, highlight_links, portfolio_graph));
 
 // Pause orbit control during animation 
 const controlBeacon = portfolio_graph.controls() as OrbitControls;
