@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { getJSONdoc } from './utilities';
-import ForceGraph3D from '3d-force-graph';
+import ForceGraph3D, { ForceGraph3DInstance } from '3d-force-graph';
 import { createEmptyGraph, addToGraph, createNodeObject, crossLinkObjects,
   highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
   focusNodeOnClick } from './graph-utils';
@@ -22,8 +22,8 @@ let animation_controls = {
   rot_increment: Math.PI / 1000,
   rot_update_ms: 10,
   hover_node: null,
-  highlight_color_main_node: 'rgb(255,0,0, 1)',
-  highlight_color_neighbor_node: 'rgba(255,160,0,0.8)',
+  highlight_color_main_node: 'rgb(255,0,0)',
+  highlight_color_neighbor_node: 'rgb(255,160,0)',
 }
 const highlight_nodes = new Set();
 const highlight_links = new Set();
@@ -37,7 +37,7 @@ crossLinkObjects(portfolio_graph_data);
 
 // Construct 3d graph
 const elem = document.getElementById('3d-graph')!;
-const portfolio_graph = ForceGraph3D({
+const portfolio_graph:ForceGraph3DInstance = ForceGraph3D({
   extraRenderers: [new CSS2DRenderer() as any]
 })(elem)
   .graphData(portfolio_graph_data)
