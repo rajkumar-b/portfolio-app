@@ -19,7 +19,7 @@ function addToGraph(graph_data: GraphData, json: JSON){
     graph_data.links = graph_data.links.concat(json['links']);
 }
 
-function createNodeObject(node: any): CSS2DObject{
+function createNodeObject(node: any): THREE.Object3D{
     const nodeEl = document.createElement('div');
     nodeEl.textContent = node.name;
     nodeEl.style.color = node.color;
@@ -27,20 +27,26 @@ function createNodeObject(node: any): CSS2DObject{
     nodeEl.id = `node-${node.id}`;
     const nodeObj = new CSS2DObject(nodeEl);
     if (node.type === 'img'){
-        const image = getImageSprite(graph_images + node.img);
+        const image = getImageSprite(12, graph_images + node.img);
         image.visible = false;
         nodeObj.add(image);
         node.image3d = image;
     }
+    nodeObj.addEventListener('added', function () {
+        this.parent.onBeforeRender = function (renderer, scene, camera, geometry, material, group) {
+            material.opacity = 0.75;
+        }
+    });
+    
     return nodeObj;
 }
 
-function getImageSprite(imageLoc: string): THREE.Sprite{
-    const imgTexture = new THREE.TextureLoader().load(`${imageLoc}`);
-    imgTexture.colorSpace = THREE.SRGBColorSpace;
-    const material = new THREE.SpriteMaterial({ map: imgTexture });
+function getImageSprite(size:number, image_loc: string): THREE.Sprite{
+    const image_texture = new THREE.TextureLoader().load(image_loc);
+    image_texture.colorSpace = THREE.SRGBColorSpace;
+    const material = new THREE.SpriteMaterial({ map: image_texture});
     const sprite = new THREE.Sprite(material);
-    sprite.scale.set(12, 12, 12);
+    sprite.scale.set(size, size, size);
     return sprite;
 }
 
@@ -109,14 +115,14 @@ function highlightLinkOnHover(link: any, highlight_nodes: Set<any>, highlight_li
 }
 
 function handleNodeColorChange(node: any, highlight_nodes: Set<any>, animation_controls: any): string{
-    let colorToReturn = node.color
+    let colorToReturn: string = node.color? node.color: 'white';
     if (highlight_nodes.has(node)){ 
         if (node === animation_controls.hover_node) {
             colorToReturn = animation_controls.highlight_color_main_node;
         } else {
             colorToReturn = animation_controls.highlight_color_neighbor_node;
         }
-    } 
+    }
     return colorToReturn;
 }
 
