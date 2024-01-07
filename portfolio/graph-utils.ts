@@ -1,7 +1,11 @@
+import * as THREE from 'three';
 import { GraphData } from 'three-forcegraph';
 import { ForceGraph3DInstance } from '3d-force-graph';
 import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
+const graph_images = '../res/images/graph/portfolio/';
+const image3d_visible = new Set();
 
 function createEmptyGraph(): GraphData{
     return {
@@ -15,13 +19,35 @@ function addToGraph(graph_data: GraphData, json: JSON){
     graph_data.links = graph_data.links.concat(json['links']);
 }
 
-function createNodeObject(node: any): CSS2DObject{
+function createNodeObject(node: any): THREE.Object3D{
     const nodeEl = document.createElement('div');
     nodeEl.textContent = node.name;
     nodeEl.style.color = node.color;
     nodeEl.className = 'node-label';
     nodeEl.id = `node-${node.id}`;
-    return new CSS2DObject(nodeEl);
+    const nodeObj = new CSS2DObject(nodeEl);
+    if (node.type === 'img'){
+        const image = getImageSprite(12, graph_images + node.img);
+        image.visible = false;
+        nodeObj.add(image);
+        node.image3d = image;
+    }
+    nodeObj.addEventListener('added', function () {
+        this.parent.onBeforeRender = function (renderer, scene, camera, geometry, material, group) {
+            material.opacity = 0.75;
+        }
+    });
+    
+    return nodeObj;
+}
+
+function getImageSprite(size:number, image_loc: string): THREE.Sprite{
+    const image_texture = new THREE.TextureLoader().load(image_loc);
+    image_texture.colorSpace = THREE.SRGBColorSpace;
+    const material = new THREE.SpriteMaterial({ map: image_texture});
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(size, size, size);
+    return sprite;
 }
 
 function hideClass(classname: string, hide:boolean = true, exceptions: string[] = []){
@@ -58,46 +84,52 @@ function updateHighlight(graph: ForceGraph3DInstance) {
 }
 
 function highlightNodeOnHover(node: any, animation_controls: any, 
-    highlightNodes: Set<any>, highlightLinks: Set<any>, graph: ForceGraph3DInstance){
+    highlight_nodes: Set<any>, highlight_links: Set<any>, graph: ForceGraph3DInstance){
         
-        if ((!node && !highlightNodes.size) || (node && animation_controls.hoverNode === node)) return;
+        if ((!node && !highlight_nodes.size) || (node && animation_controls.hover_node === node)) return;
 
-        highlightNodes.clear();
-        highlightLinks.clear();
+        highlight_nodes.clear();
+        highlight_links.clear();
         if (node) {
-            highlightNodes.add(node);
-            node.neighbors.forEach((neighbor: any) => highlightNodes.add(neighbor));
-            node.links.forEach((link: any) => highlightLinks.add(link));
+            highlight_nodes.add(node);
+            node.neighbors.forEach((neighbor: any) => highlight_nodes.add(neighbor));
+            node.links.forEach((link: any) => highlight_links.add(link));
         }
 
-        animation_controls.hoverNode = node || null;
+        animation_controls.hover_node = node || null;
 
         updateHighlight(graph);
 }
 
-function highlightLinkOnHover(link: any, highlightNodes: Set<any>, highlightLinks: Set<any>, graph: ForceGraph3DInstance){
-    highlightNodes.clear();
-    highlightLinks.clear();
+function highlightLinkOnHover(link: any, highlight_nodes: Set<any>, highlight_links: Set<any>, graph: ForceGraph3DInstance){
+    highlight_nodes.clear();
+    highlight_links.clear();
   
     if (link) {
-      highlightLinks.add(link);
-      highlightNodes.add(link.source);
-      highlightNodes.add(link.target);
+        highlight_links.add(link);
+        highlight_nodes.add(link.source);
+        highlight_nodes.add(link.target);
     }
   
     updateHighlight(graph);
 }
 
-function handleNodeColorChange(node: any, highlightNodes: Set<any>, animation_controls: any): string{
-    let colorToReturn = node.color
-    if (highlightNodes.has(node)){ 
-        if (node === animation_controls.hoverNode) {
-            colorToReturn = animation_controls.highlightNodeColor;
+function handleNodeColorChange(node: any, highlight_nodes: Set<any>, animation_controls: any): string{
+    let colorToReturn: string = node.color? node.color: 'white';
+    if (highlight_nodes.has(node)){ 
+        if (node === animation_controls.hover_node) {
+            colorToReturn = animation_controls.highlight_color_main_node;
         } else {
-            colorToReturn = animation_controls.neighborNodeColor;
+            colorToReturn = animation_controls.highlight_color_neighbor_node;
         }
-    } 
+    }
     return colorToReturn;
+}
+
+function hideVisibleImages(){
+    if (image3d_visible.size) {
+        image3d_visible.forEach((imgObj: any) => {imgObj.visible=false;})
+    }
 }
 
 function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, animation_controls: any){
@@ -105,6 +137,7 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
         if (animation_controls.is_rotation_active) {
             graph.enableNodeDrag(true);
             hideClass('node-label');
+            hideVisibleImages();
             orbit_control.enabled = false;
             if (!animation_controls.reset_needed){
                 graph.cameraPosition({
@@ -124,7 +157,7 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
                     setTimeout(() => {
                         animation_controls.node_unfocus_active = false;
                         animation_controls.reset_needed = false;
-                        // hideClass('node-label', false);
+                        // hideClass('node-label', false); hideVisibleImages();
                     }, 3000);
                 }
             }
@@ -142,12 +175,17 @@ function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3
         const newPos = node.x || node.y || node.z
             ? { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }
             : { x: 0, y: 0, z: distance }; 
-            graph.cameraPosition( newPos, node, 3000 );
+        graph.cameraPosition( newPos, node, 3000 );
+        hideVisibleImages();
         hideClass('node-label', true, [`node-${node.id}`]);
+        if (node.image3d){
+            node.image3d.visible = true;
+            image3d_visible.add(node.image3d);
+        }
         animation_controls.reset_needed = true;
     }
 }
 
-export {createEmptyGraph, addToGraph, createNodeObject, hideClass, crossLinkObjects,
+export {createEmptyGraph, addToGraph, createNodeObject, crossLinkObjects,
     highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
     focusNodeOnClick};

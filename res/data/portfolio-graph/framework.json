@@ -8,7 +8,8 @@
         {
           "id": "fwk1",
           "name": "Python",
-          "geometry": "img",
+          "type": "img",
+          "img": "python.jpg",
           "color": "blue",
           "val": 5
         },
