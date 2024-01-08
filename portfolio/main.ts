@@ -22,6 +22,8 @@ let animation_controls = {
   rot_increment: Math.PI / 1000,
   rot_update_ms: 10,
   hover_node: null,
+  node_focus_distance: 50,
+  node_focus_time: 3000,
   highlight_color_main_node: 'rgb(255,0,0)',
   highlight_color_neighbor_node: 'rgb(255,160,0)',
 }
@@ -36,10 +38,10 @@ addToGraph(portfolio_graph_data, await getJSONdoc(portfolio_graph_framework));
 crossLinkObjects(portfolio_graph_data);
 
 // Construct 3d graph
-const elem = document.getElementById('3d-graph')!;
+const canvas_element = document.getElementById('3d-graph')!;
 const portfolio_graph:ForceGraph3DInstance = ForceGraph3D({
   extraRenderers: [new CSS2DRenderer() as any]
-})(elem)
+})(canvas_element)
   .graphData(portfolio_graph_data)
   .backgroundColor('#000003')
   .nodeColor(node => handleNodeColorChange(node, highlight_nodes, animation_controls))
@@ -54,15 +56,15 @@ const portfolio_graph:ForceGraph3DInstance = ForceGraph3D({
   .onLinkHover(link => highlightLinkOnHover(link, highlight_nodes, highlight_links, portfolio_graph));
 
 // Pause orbit control during animation 
-const controlBeacon = portfolio_graph.controls() as OrbitControls;
-controlBeacon.addEventListener( 'change', () => {
+const control_beacon = portfolio_graph.controls() as OrbitControls;
+control_beacon.addEventListener( 'change', () => {
   if (!animation_controls.is_rotation_active){
     animation_controls.reset_needed = true;
   }
 });
 
 // start animaition
-animateLoop(portfolio_graph, controlBeacon, animation_controls);
+animateLoop(portfolio_graph, control_beacon, animation_controls);
 
 // Button toggle
 document.getElementById('rotation-toggle')!.addEventListener('click', event => {
@@ -71,5 +73,5 @@ document.getElementById('rotation-toggle')!.addEventListener('click', event => {
 });
 
 // Postprocessing - Add Glow
-const bloomPass = new UnrealBloomPass( new THREE.Vector2(window.innerWidth, window.innerHeight), 2, 1, 0 );
-portfolio_graph.postProcessingComposer().addPass(bloomPass);
+const bloom_pass = new UnrealBloomPass( new THREE.Vector2(window.innerWidth, window.innerHeight), 2, 1, 0 );
+portfolio_graph.postProcessingComposer().addPass(bloom_pass);
