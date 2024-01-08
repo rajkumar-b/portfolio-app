@@ -5,7 +5,7 @@ import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const graph_images = '../res/images/graph/portfolio/';
-const image3d_visible = new Set();
+const image3d_visible = new Set<THREE.Sprite>();
 
 function createEmptyGraph(): GraphData{
     return {
@@ -26,25 +26,27 @@ function createNodeObject(node: any): THREE.Object3D{
     nodeEl.className = 'node-label';
     nodeEl.id = `node-${node.id}`;
     const nodeObj = new CSS2DObject(nodeEl);
-    if (node.type === 'img'){
-        const image = getImageSprite(12, graph_images + node.img);
-        image.visible = false;
-        nodeObj.add(image);
-        node.image3d = image;
-    }
     nodeObj.addEventListener('added', function () {
         this.parent.onBeforeRender = function (renderer, scene, camera, geometry, material, group) {
-            material.opacity = 0.75;
+            const cssNode = this.children.find(a => a.isCSS2DObject);
+            const imgNode = this.children.find(a => a.isSprite);
+            if (image3d_visible.has(imgNode)){
+                // do material swap
+                material.opacity = 0;
+            } else {
+                // keep old material
+                material.opacity = 0.75;
+            }
+            
         }
     });
-    
     return nodeObj;
 }
 
 function getImageSprite(size:number, image_loc: string): THREE.Sprite{
     const image_texture = new THREE.TextureLoader().load(image_loc);
     image_texture.colorSpace = THREE.SRGBColorSpace;
-    const material = new THREE.SpriteMaterial({ map: image_texture});
+    const material = new THREE.SpriteMaterial({ map: image_texture, transparent: false, color:'#000000'});
     const sprite = new THREE.Sprite(material);
     sprite.scale.set(size, size, size);
     return sprite;
@@ -126,9 +128,17 @@ function handleNodeColorChange(node: any, highlight_nodes: Set<any>, animation_c
     return colorToReturn;
 }
 
-function hideVisibleImages(){
+function detachVisibleImages(){
     if (image3d_visible.size) {
-        image3d_visible.forEach((imgObj: any) => {imgObj.visible=false;})
+        image3d_visible.forEach((imgObj) => {imgObj.removeFromParent();})
+    }
+}
+
+function getPositionAfterRotation(rot_distance:number, rot_angle:number){
+    return {
+        x: rot_distance * Math.sin(rot_angle),
+        y: rot_distance * Math.sin(rot_angle),
+        z: rot_distance * Math.cos(rot_angle)
     }
 }
 
@@ -137,22 +147,15 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
         if (animation_controls.is_rotation_active) {
             graph.enableNodeDrag(true);
             hideClass('node-label');
-            hideVisibleImages();
+            detachVisibleImages();
             orbit_control.enabled = false;
             if (!animation_controls.reset_needed){
-                graph.cameraPosition({
-                    x: animation_controls.rot_distance * Math.sin(animation_controls.rot_angle),
-                    y: animation_controls.rot_distance * Math.sin(animation_controls.rot_angle),
-                    z: animation_controls.rot_distance * Math.cos(animation_controls.rot_angle)
-                });
+                graph.cameraPosition(getPositionAfterRotation(animation_controls.rot_distance, animation_controls.rot_angle));
                 animation_controls.rot_angle += animation_controls.rot_increment;
             } else {
                 if (!animation_controls.node_unfocus_active){
-                    graph.cameraPosition({
-                        x: animation_controls.rot_distance * Math.sin(animation_controls.rot_angle),
-                        y: animation_controls.rot_distance * Math.sin(animation_controls.rot_angle),
-                        z: animation_controls.rot_distance * Math.cos(animation_controls.rot_angle)
-                    }, undefined, 3000);
+                    graph.cameraPosition(getPositionAfterRotation(animation_controls.rot_distance, animation_controls.rot_angle), 
+                        undefined, animation_controls.node_focus_time);
                     animation_controls.node_unfocus_active = true;
                     setTimeout(() => {
                         animation_controls.node_unfocus_active = false;
@@ -168,20 +171,33 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
     }, animation_controls.rot_update_ms);
 }
 
+function getNodeFocusPosition(node:any, focus_distance: number): {x:number , y: number, z: number}{
+    const distRatio = 1 + focus_distance/Math.hypot(node.x, node.y, node.z);
+    const newPos = node.x || node.y || node.z
+        ? { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }
+        : { x: 0, y: 0, z: focus_distance }; 
+    return newPos;
+}
+
+function attachImage(node: any){
+    if (node.type === 'img'){
+        const image = getImageSprite(12, graph_images + node.img);
+        node.__threeObj.add(image);
+        image3d_visible.add(image);
+    }
+}
+
 function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3DInstance){
     if (!animation_controls.is_rotation_active){
-        const distance = 40;
-        const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
-        const newPos = node.x || node.y || node.z
-            ? { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }
-            : { x: 0, y: 0, z: distance }; 
-        graph.cameraPosition( newPos, node, 3000 );
-        hideVisibleImages();
+        // focus onto node
+        const focus_distance = animation_controls.node_focus_distance? animation_controls.node_focus_distance: 50;
+        const focus_time_ms = animation_controls.node_focus_time? animation_controls.node_focus_time: 3000;
+        graph.cameraPosition( getNodeFocusPosition(node, focus_distance), node, focus_time_ms );
+
+        // take care of other world parameterson focus
+        detachVisibleImages();
         hideClass('node-label', true, [`node-${node.id}`]);
-        if (node.image3d){
-            node.image3d.visible = true;
-            image3d_visible.add(node.image3d);
-        }
+        attachImage(node);
         animation_controls.reset_needed = true;
     }
 }
