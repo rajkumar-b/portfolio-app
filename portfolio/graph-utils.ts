@@ -6,6 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const graph_images = '../res/images/graph/portfolio/';
 const image3d_visible = new Set<THREE.Sprite>();
+let nodeOnFocus = null;
 
 function createEmptyGraph(): GraphData{
     return {
@@ -43,10 +44,10 @@ function createNodeObject(node: any): THREE.Object3D{
     return nodeObj;
 }
 
-function getImageSprite(size:number, image_loc: string): THREE.Sprite{
+function getImageSprite(size:number, image_loc: string, image_intensity: string = '#666666'): THREE.Sprite{
     const image_texture = new THREE.TextureLoader().load(image_loc);
     image_texture.colorSpace = THREE.SRGBColorSpace;
-    const material = new THREE.SpriteMaterial({ map: image_texture, transparent: false, color:'#000000'});
+    const material = new THREE.SpriteMaterial({ map: image_texture, color: image_intensity, transparent: false });
     const sprite = new THREE.Sprite(material);
     sprite.scale.set(size, size, size);
     return sprite;
@@ -94,7 +95,11 @@ function highlightNodeOnHover(node: any, animation_controls: any,
         highlight_links.clear();
         if (node) {
             highlight_nodes.add(node);
-            node.neighbors.forEach((neighbor: any) => highlight_nodes.add(neighbor));
+            node.neighbors.forEach((neighbor: any) => {
+                if (!(nodeOnFocus && nodeOnFocus == neighbor)) {
+                    highlight_nodes.add(neighbor)
+                }
+            });
             node.links.forEach((link: any) => highlight_links.add(link));
         }
 
@@ -160,8 +165,9 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
                     setTimeout(() => {
                         animation_controls.node_unfocus_active = false;
                         animation_controls.reset_needed = false;
+                        nodeOnFocus = null;
                         // hideClass('node-label', false); hideVisibleImages();
-                    }, 3000);
+                    }, animation_controls.node_focus_time);
                 }
             }
         } else {
@@ -198,6 +204,7 @@ function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3
         detachVisibleImages();
         hideClass('node-label', true, [`node-${node.id}`]);
         attachImage(node);
+        nodeOnFocus = node;
         animation_controls.reset_needed = true;
     }
 }
