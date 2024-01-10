@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const graph_images = '../res/images/graph/portfolio/';
 const image3d_visible = new Set<THREE.Sprite>();
-let nodeOnFocus = null;
+let node_on_focus = null;
 
 function createEmptyGraph(): GraphData{
     return {
@@ -32,13 +32,10 @@ function createNodeObject(node: any): THREE.Object3D{
             const cssNode = this.children.find(a => a.isCSS2DObject);
             const imgNode = this.children.find(a => a.isSprite);
             if (image3d_visible.has(imgNode)){
-                // do material swap
                 material.opacity = 0;
             } else {
-                // keep old material
                 material.opacity = 0.75;
             }
-            
         }
     });
     return nodeObj;
@@ -47,7 +44,7 @@ function createNodeObject(node: any): THREE.Object3D{
 function getImageSprite(size:number, image_loc: string, image_intensity: string = '#666666'): THREE.Sprite{
     const image_texture = new THREE.TextureLoader().load(image_loc);
     image_texture.colorSpace = THREE.SRGBColorSpace;
-    const material = new THREE.SpriteMaterial({ map: image_texture, color: image_intensity, transparent: false });
+    const material = new THREE.SpriteMaterial({ map: image_texture, color: image_intensity, transparent: false, alphaTest: 0.5 });
     const sprite = new THREE.Sprite(material);
     sprite.scale.set(size, size, size);
     return sprite;
@@ -96,7 +93,7 @@ function highlightNodeOnHover(node: any, animation_controls: any,
         if (node) {
             highlight_nodes.add(node);
             node.neighbors.forEach((neighbor: any) => {
-                if (!(nodeOnFocus && nodeOnFocus == neighbor)) {
+                if (!(node_on_focus && node_on_focus == neighbor)) {
                     highlight_nodes.add(neighbor)
                 }
             });
@@ -165,8 +162,7 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
                     setTimeout(() => {
                         animation_controls.node_unfocus_active = false;
                         animation_controls.reset_needed = false;
-                        nodeOnFocus = null;
-                        // hideClass('node-label', false); hideVisibleImages();
+                        node_on_focus = null;
                     }, animation_controls.node_focus_time);
                 }
             }
@@ -193,6 +189,12 @@ function attachImage(node: any){
     }
 }
 
+function showNodeNeighborTitle(node: any){
+    let nodes_to_display = [`node-${node.id}`];
+    node.neighbors.forEach((neighbor: any) => nodes_to_display.push(`node-${neighbor.id}`));
+    hideClass('node-label', true, nodes_to_display);
+}
+
 function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3DInstance){
     if (!animation_controls.is_rotation_active){
         // focus onto node
@@ -202,9 +204,9 @@ function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3
 
         // take care of other world parameterson focus
         detachVisibleImages();
-        hideClass('node-label', true, [`node-${node.id}`]);
         attachImage(node);
-        nodeOnFocus = node;
+        showNodeNeighborTitle(node);
+        node_on_focus = node;
         animation_controls.reset_needed = true;
     }
 }

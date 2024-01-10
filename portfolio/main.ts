@@ -22,7 +22,7 @@ let animation_controls = {
   rot_increment: Math.PI / 1000,
   rot_update_ms: 10,
   hover_node: null,
-  node_focus_distance: 50,
+  node_focus_distance: 100,
   node_focus_time: 3000,
   highlight_color_main_node: 'rgb(255,0,0)',
   highlight_color_neighbor_node: 'rgb(255,160,0)',
@@ -69,7 +69,7 @@ animateLoop(portfolio_graph, control_beacon, animation_controls);
 // Button toggle
 document.getElementById('rotation-toggle')!.addEventListener('click', event => {
   animation_controls.is_rotation_active = !animation_controls.is_rotation_active;
-  (<HTMLElement> event.target!).innerHTML = `${(animation_controls.is_rotation_active ? 'Free Navigation' : 'Play Animation')}`;
+  (<HTMLElement> event.target!).innerHTML = `${(animation_controls.is_rotation_active ? 'Free Navigation' : 'Unfocus & Animate')}`;
 });
 
 // Postprocessing - Add Glow
