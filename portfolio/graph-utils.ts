@@ -20,8 +20,6 @@ function addToGraph(graph_data: GraphData, json: JSON){
     graph_data.links = graph_data.links.concat(json['links']);
 }
 
-let first = true;
-
 function createNodeObject(node: any): THREE.Object3D{
     const nodeEl = document.createElement('div');
     nodeEl.textContent = node.name;
@@ -36,10 +34,6 @@ function createNodeObject(node: any): THREE.Object3D{
             const cssNode = this.children.find(a => a.isCSS2DObject);
             if (cssNode){
                 cssNode.element.style.color = `#${this.material.color.getHexString()}`
-            }
-            if (first){
-                console.log();
-                first = false;
             }
             const imgNode = this.children.find(a => a.isSprite);
             if (image3d_visible.has(imgNode)){
@@ -155,11 +149,11 @@ function getPositionAfterRotation(rot_distance:number, rot_angle:number){
     }
 }
 
-function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, animation_controls: any){
+function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, animation_controls: any, link_highlights: Set<any>){
     setInterval(() => {
+        node_on_focus? showNodeNeighborTitle(node_on_focus): hideClass('node-label');
         if (animation_controls.is_rotation_active) {
             graph.enableNodeDrag(true);
-            hideClass('node-label');
             detachVisibleImages();
             orbit_control.enabled = false;
             if (!animation_controls.reset_needed){
@@ -180,6 +174,15 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
         } else {
             graph.enableNodeDrag(false);
             orbit_control.enabled = true;    
+        }
+        if (animation_controls.hover_node) showNodeNeighborTitle(animation_controls.hover_node);
+        if (link_highlights && link_highlights.size) {
+            const show_nodes: string[] = [];
+            link_highlights.forEach((link: any) => {
+                show_nodes.push(`node-${link.source.id}`);
+                show_nodes.push(`node-${link.target.id}`);
+            });
+            hideClass('node-label', true, show_nodes);
         }
     }, animation_controls.rot_update_ms);
 }
@@ -220,7 +223,6 @@ function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3
         // take care of other world parameterson focus
         detachVisibleImages();
         attachImage(node);
-        showNodeNeighborTitle(node);
         node_on_focus = node;
         animation_controls.reset_needed = true;
     }
