@@ -195,6 +195,10 @@ function getNodeFocusPosition(node:any, focus_distance: number): {x:number , y: 
 function attachImage(node: any){
     if (node.type === 'img'){
         const image = getImageSprite(12, graph_images + node.img);
+        const direction = new THREE.Vector3();
+        node.__threeObj.getWorldDirection(direction);
+        const offset = node.size? node.size/2: 5;
+        image.position.addScaledVector(direction, -offset);
         node.__threeObj.add(image);
         image3d_visible.add(image);
     }
