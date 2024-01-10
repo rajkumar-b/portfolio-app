@@ -69,7 +69,7 @@ animateLoop(portfolio_graph, control_beacon, animation_controls);
 // Button toggle
 document.getElementById('rotation-toggle')!.addEventListener('click', event => {
   animation_controls.is_rotation_active = !animation_controls.is_rotation_active;
-  (<HTMLElement> event.target!).innerHTML = `${(animation_controls.is_rotation_active ? 'Free Navigation' : 'Unfocus & Animate')}`;
+  (<HTMLElement> event.target!).innerHTML = `${(animation_controls.is_rotation_active ? 'Free Navigation' : 'Play Animation')}`;
 });
 
 // Postprocessing - Add Glow
