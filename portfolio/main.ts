@@ -64,7 +64,7 @@ control_beacon.addEventListener( 'change', () => {
 });
 
 // start animaition
-animateLoop(portfolio_graph, control_beacon, animation_controls);
+animateLoop(portfolio_graph, control_beacon, animation_controls, highlight_links);
 
 // Button toggle
 document.getElementById('rotation-toggle')!.addEventListener('click', event => {
