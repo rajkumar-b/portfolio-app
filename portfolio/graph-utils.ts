@@ -20,6 +20,8 @@ function addToGraph(graph_data: GraphData, json: JSON){
     graph_data.links = graph_data.links.concat(json['links']);
 }
 
+let first = true;
+
 function createNodeObject(node: any): THREE.Object3D{
     const nodeEl = document.createElement('div');
     nodeEl.textContent = node.name;
@@ -27,9 +29,18 @@ function createNodeObject(node: any): THREE.Object3D{
     nodeEl.className = 'node-label';
     nodeEl.id = `node-${node.id}`;
     const nodeObj = new CSS2DObject(nodeEl);
+    const offset = node.size? -node.size-2: -10;
+    nodeObj.position.add(new THREE.Vector3(offset, offset));
     nodeObj.addEventListener('added', function () {
         this.parent.onBeforeRender = function (renderer, scene, camera, geometry, material, group) {
             const cssNode = this.children.find(a => a.isCSS2DObject);
+            if (cssNode){
+                cssNode.element.style.color = `#${this.material.color.getHexString()}`
+            }
+            if (first){
+                console.log();
+                first = false;
+            }
             const imgNode = this.children.find(a => a.isSprite);
             if (image3d_visible.has(imgNode)){
                 material.opacity = 0;
