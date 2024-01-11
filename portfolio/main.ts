@@ -4,13 +4,14 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import ForceGraph3D, { ForceGraph3DInstance } from '3d-force-graph';
-import { getGraphData, createNodeObject, crossLinkObjects,
+import { getGraphData, createNodeObject, crossLinkObjects, addInvisibleNeighbors,
   highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
   focusNodeOnClick } from './graph-utils';
 
 // const portfolio_content_json = "../res/data/portfolio-content.json";
 const portfolio_graph_data_root = "../res/data/portfolio-graph" 
 const data_folders_to_include: string[] = ["framework", "role"];
+const data_folders_to_sublink: string[] = ["framework-role"];
 
 // Set control variables for decisive actions
 let animation_controls = {
@@ -55,6 +56,17 @@ const portfolio_graph:ForceGraph3DInstance = ForceGraph3D({
   .onNodeHover(node => highlightNodeOnHover(node, animation_controls, highlight_nodes, highlight_links, portfolio_graph))
   .onNodeDragEnd((node: any) => { node.fx = node.x; node.fy = node.y; node.fz = node.z; })
   .onLinkHover(link => highlightLinkOnHover(link, highlight_nodes, highlight_links, portfolio_graph));
+
+// load graph with invisible links
+const sublink_data = await getGraphData(portfolio_graph_data_root, data_folders_to_sublink);
+let loadCheck = setInterval(() => {
+  const nodesLoaded = portfolio_graph_data.nodes.every(node => node.x? true: false);
+  const linksLoaded = portfolio_graph_data.nodes.every((node: any) => node.neighbors? true: false);
+  if ( nodesLoaded && linksLoaded ){
+    addInvisibleNeighbors(portfolio_graph_data, sublink_data);
+    clearInterval(loadCheck);
+  }
+}, 1);
 
 // Pause orbit control during animation 
 const control_beacon = portfolio_graph.controls() as OrbitControls;
