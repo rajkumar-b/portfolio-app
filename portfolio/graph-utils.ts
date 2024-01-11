@@ -159,9 +159,10 @@ function getPositionAfterRotation(rot_distance:number, rot_angle:number){
     }
 }
 
-function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, animation_controls: any, link_highlights: Set<any>){
+function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, animation_controls: any, 
+    link_highlights: Set<any>, head_nodes: string[]){
     setInterval(() => {
-        node_on_focus? showNodeNeighborTitle(node_on_focus): hideClass('node-label');
+        node_on_focus? showNodeNeighborTitle(node_on_focus): hideClass('node-label', true, head_nodes.map(id => `node-${id}`));
         if (animation_controls.is_rotation_active) {
             graph.enableNodeDrag(true);
             detachVisibleImages();

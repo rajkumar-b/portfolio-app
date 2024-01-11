@@ -1,7 +1,7 @@
 {
     "nodes": [
         {
-          "id": "hdr-role",
+          "id": "head-role",
           "name": "Roles",
           "val": 10
         },
@@ -20,11 +20,11 @@
     ],
     "links": [
         {
-            "source": "hdr-role",
+            "source": "head-role",
             "target": "role-backend"
         },
         {
-            "source": "hdr-role",
+            "source": "head-role",
             "target": "role-frontend"
         }
     ]
