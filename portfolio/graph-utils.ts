@@ -3,6 +3,7 @@ import { GraphData } from 'three-forcegraph';
 import { ForceGraph3DInstance } from '3d-force-graph';
 import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { getJSONdoc } from './utilities';
 
 const graph_images = '../res/images/graph/portfolio/';
 const image3d_visible = new Set<THREE.Sprite>();
@@ -18,6 +19,15 @@ function createEmptyGraph(): GraphData{
 function addToGraph(graph_data: GraphData, json: JSON){
     graph_data.nodes = graph_data.nodes.concat(json['nodes']);
     graph_data.links = graph_data.links.concat(json['links']);
+}
+
+async function getGraphData(root:string, folders: string[]): Promise<GraphData>{
+    const graph_data = createEmptyGraph();
+    for (const folder of folders) {
+        const location = `${root}/${folder}/data.json`;
+        addToGraph(graph_data, await getJSONdoc(location));
+    }
+    return graph_data;
 }
 
 function createNodeObject(node: any): THREE.Object3D{
@@ -149,9 +159,10 @@ function getPositionAfterRotation(rot_distance:number, rot_angle:number){
     }
 }
 
-function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, animation_controls: any, link_highlights: Set<any>){
+function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, animation_controls: any, 
+    link_highlights: Set<any>, head_nodes: string[]){
     setInterval(() => {
-        node_on_focus? showNodeNeighborTitle(node_on_focus): hideClass('node-label');
+        node_on_focus? showNodeNeighborTitle(node_on_focus): hideClass('node-label', true, head_nodes.map(id => `node-${id}`));
         if (animation_controls.is_rotation_active) {
             graph.enableNodeDrag(true);
             detachVisibleImages();
@@ -228,6 +239,6 @@ function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3
     }
 }
 
-export {createEmptyGraph, addToGraph, createNodeObject, crossLinkObjects,
+export {createEmptyGraph, addToGraph, getGraphData, createNodeObject, crossLinkObjects,
     highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
     focusNodeOnClick};

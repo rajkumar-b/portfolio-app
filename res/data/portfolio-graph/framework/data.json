@@ -1,0 +1,86 @@
+{
+    "nodes": [
+        {
+          "id": "head-framework",
+          "name": "Framework",
+          "val": 10
+        },
+        {
+          "id": "framework-python",
+          "name": "Python",
+          "type": "img",
+          "img": "python.png",
+          "color": "blue",
+          "val": 5
+        },
+        {
+          "id": "framework-java",
+          "name": "Java",
+          "val": 5
+        },
+        {
+          "id": "framework-sql",
+          "name": "SQL",
+          "val": 5
+        },
+        {
+          "id": "framework-git",
+          "name": "Git",
+          "val": 5
+        },
+        {
+          "id": "framework-aws",
+          "name": "AWS",
+          "val": 5
+        },
+        {
+          "id": "framework-nosql",
+          "name": "NoSQL",
+          "val": 5
+        },
+        {
+          "id": "framework-rds",
+          "name": "RDS",
+          "val": 5
+        },
+        {
+          "id": "framework-mongodb",
+          "name": "MongoDB",
+          "val": 5
+        }
+    ],
+    "links": [
+        {
+            "source": "head-framework",
+            "target": "framework-python"
+        },
+        {
+            "source": "head-framework",
+            "target": "framework-java"
+        },
+        {
+            "source": "head-framework",
+            "target": "framework-sql"
+        },
+        {
+            "source": "head-framework",
+            "target": "framework-git"
+        },
+        {
+            "source": "head-framework",
+            "target": "framework-aws"
+        },
+        {
+            "source": "head-framework",
+            "target": "framework-nosql"
+        },
+        {
+            "source": "head-framework",
+            "target": "framework-rds"
+        },
+        {
+            "source": "head-framework",
+            "target": "framework-mongodb"
+        }
+    ]
+  }

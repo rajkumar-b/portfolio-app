@@ -3,14 +3,14 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-import { getJSONdoc } from './utilities';
 import ForceGraph3D, { ForceGraph3DInstance } from '3d-force-graph';
-import { createEmptyGraph, addToGraph, createNodeObject, crossLinkObjects,
+import { getGraphData, createNodeObject, crossLinkObjects,
   highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
   focusNodeOnClick } from './graph-utils';
 
 // const portfolio_content_json = "../res/data/portfolio-content.json";
-const portfolio_graph_framework = "../res/data/portfolio-graph/framework.json";
+const portfolio_graph_data_root = "../res/data/portfolio-graph" 
+const data_folders_to_include: string[] = ["framework", "role"];
 
 // Set control variables for decisive actions
 let animation_controls = {
@@ -29,11 +29,12 @@ let animation_controls = {
 }
 const highlight_nodes = new Set();
 const highlight_links = new Set();
+const head_nodes = new Set<string>();
 
 
 // Get data for 3d graph
-const portfolio_graph_data = createEmptyGraph();
-addToGraph(portfolio_graph_data, await getJSONdoc(portfolio_graph_framework));
+const portfolio_graph_data = await getGraphData(portfolio_graph_data_root, data_folders_to_include);
+portfolio_graph_data.nodes.forEach(node => {if (node.id && (node.id as string).startsWith('head-')) head_nodes.add(`${node.id}`);});
 // console.log(portfolio_graph_data);
 crossLinkObjects(portfolio_graph_data);
 
@@ -64,7 +65,7 @@ control_beacon.addEventListener( 'change', () => {
 });
 
 // start animaition
-animateLoop(portfolio_graph, control_beacon, animation_controls, highlight_links);
+animateLoop(portfolio_graph, control_beacon, animation_controls, highlight_links, Array.from(head_nodes));
 
 // Button toggle
 document.getElementById('rotation-toggle')!.addEventListener('click', event => {
