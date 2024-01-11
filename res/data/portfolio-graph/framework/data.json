@@ -47,6 +47,11 @@
           "id": "framework-mongodb",
           "name": "MongoDB",
           "val": 5
+        },
+        {
+          "id": "framework-reactjs",
+          "name": "ReactJS",
+          "val": 5
         }
     ],
     "links": [
@@ -81,6 +86,10 @@
         {
             "source": "head-framework",
             "target": "framework-mongodb"
+        },
+        {
+            "source": "head-framework",
+            "target": "framework-reactjs"
         }
     ]
   }

@@ -91,6 +91,17 @@ function crossLinkObjects(graph_data: GraphData){
     });
 }
 
+function addInvisibleNeighbors(main_graph_data: GraphData, invisible_links: GraphData){
+    invisible_links.links.forEach((link: any) => {
+        const a: any = main_graph_data.nodes.find(node => node.id === link.source);
+        const b: any = main_graph_data.nodes.find(node => node.id === link.target);
+        !a.neighbors && (a.neighbors = []);
+        !b.neighbors && (b.neighbors = []);
+        a.neighbors.push(b);
+        b.neighbors.push(a);
+    });
+}
+
 function updateHighlight(graph: ForceGraph3DInstance) {
     graph
         .nodeColor(graph.nodeColor())
@@ -108,7 +119,7 @@ function highlightNodeOnHover(node: any, animation_controls: any,
         if (node) {
             highlight_nodes.add(node);
             node.neighbors.forEach((neighbor: any) => {
-                if (!(node_on_focus && node_on_focus == neighbor)) {
+                if (!(node_on_focus && (node_on_focus === neighbor))) {
                     highlight_nodes.add(neighbor)
                 }
             });
@@ -186,7 +197,6 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
             graph.enableNodeDrag(false);
             orbit_control.enabled = true;    
         }
-        if (animation_controls.hover_node) showNodeNeighborTitle(animation_controls.hover_node);
         if (link_highlights && link_highlights.size) {
             const show_nodes: string[] = [];
             link_highlights.forEach((link: any) => {
@@ -195,6 +205,7 @@ function animateLoop(graph: ForceGraph3DInstance, orbit_control: OrbitControls, 
             });
             hideClass('node-label', true, show_nodes);
         }
+        if (animation_controls.hover_node) showNodeNeighborTitle(animation_controls.hover_node);
     }, animation_controls.rot_update_ms);
 }
 
@@ -239,6 +250,6 @@ function focusNodeOnClick(node: any, animation_controls: any, graph: ForceGraph3
     }
 }
 
-export {createEmptyGraph, addToGraph, getGraphData, createNodeObject, crossLinkObjects,
+export {createEmptyGraph, addToGraph, getGraphData, createNodeObject, crossLinkObjects, addInvisibleNeighbors,
     highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
     focusNodeOnClick};

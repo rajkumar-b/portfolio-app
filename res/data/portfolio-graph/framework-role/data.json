@@ -1,0 +1,30 @@
+{
+    "nodes": [],
+    "links": [
+        {
+            "source": "framework-python",
+            "target": "role-backend",
+            "invisible": true
+        },
+        {
+            "source": "framework-java",
+            "target": "role-backend",
+            "invisible": true
+        },
+        {
+            "source": "framework-sql",
+            "target": "role-backend",
+            "invisible": true
+        },
+        {
+            "source": "framework-git",
+            "target": "role-backend",
+            "invisible": true
+        },
+        {
+            "source": "framework-reactjs",
+            "target": "role-frontend",
+            "invisible": true
+        }
+    ]
+  }
