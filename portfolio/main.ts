@@ -10,7 +10,7 @@ import { getGraphData, createNodeObject, crossLinkObjects,
 
 // const portfolio_content_json = "../res/data/portfolio-content.json";
 const portfolio_graph_data_root = "../res/data/portfolio-graph" 
-const data_folders_to_include: string[] = ["framework"];
+const data_folders_to_include: string[] = ["framework", "role"];
 
 // Set control variables for decisive actions
 let animation_controls = {

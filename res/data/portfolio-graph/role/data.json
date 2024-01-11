@@ -1,0 +1,31 @@
+{
+    "nodes": [
+        {
+          "id": "hdr-role",
+          "name": "Roles",
+          "val": 10
+        },
+        {
+          "id": "role-backend",
+          "name": "Backend",
+          "color": "blue",
+          "val": 5
+        },
+        {
+          "id": "role-frontend",
+          "name": "Frontend",
+          "color": "green",
+          "val": 5
+        }
+    ],
+    "links": [
+        {
+            "source": "hdr-role",
+            "target": "role-backend"
+        },
+        {
+            "source": "hdr-role",
+            "target": "role-frontend"
+        }
+    ]
+  }

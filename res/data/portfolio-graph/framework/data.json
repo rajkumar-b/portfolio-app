@@ -1,12 +1,12 @@
 {
     "nodes": [
         {
-          "id": "misc1",
+          "id": "head-framework",
           "name": "Framework",
           "val": 10
         },
         {
-          "id": "fwk1",
+          "id": "framework-python",
           "name": "Python",
           "type": "img",
           "img": "python.png",
@@ -14,73 +14,73 @@
           "val": 5
         },
         {
-          "id": "fwk2",
+          "id": "framework-java",
           "name": "Java",
           "val": 5
         },
         {
-          "id": "fwk3",
+          "id": "framework-sql",
           "name": "SQL",
           "val": 5
         },
         {
-          "id": "fwk4",
+          "id": "framework-git",
           "name": "Git",
           "val": 5
         },
         {
-          "id": "fwk5",
+          "id": "framework-aws",
           "name": "AWS",
           "val": 5
         },
         {
-          "id": "fwk6",
+          "id": "framework-nosql",
           "name": "NoSQL",
           "val": 5
         },
         {
-          "id": "fwk7",
+          "id": "framework-rds",
           "name": "RDS",
           "val": 5
         },
         {
-          "id": "fwk8",
+          "id": "framework-mongodb",
           "name": "MongoDB",
           "val": 5
         }
     ],
     "links": [
         {
-            "source": "misc1",
-            "target": "fwk1"
+            "source": "head-framework",
+            "target": "framework-python"
         },
         {
-            "source": "misc1",
-            "target": "fwk2"
+            "source": "head-framework",
+            "target": "framework-java"
         },
         {
-            "source": "misc1",
-            "target": "fwk3"
+            "source": "head-framework",
+            "target": "framework-sql"
         },
         {
-            "source": "misc1",
-            "target": "fwk4"
+            "source": "head-framework",
+            "target": "framework-git"
         },
         {
-            "source": "misc1",
-            "target": "fwk5"
+            "source": "head-framework",
+            "target": "framework-aws"
         },
         {
-            "source": "misc1",
-            "target": "fwk6"
+            "source": "head-framework",
+            "target": "framework-nosql"
         },
         {
-            "source": "misc1",
-            "target": "fwk7"
+            "source": "head-framework",
+            "target": "framework-rds"
         },
         {
-            "source": "misc1",
-            "target": "fwk8"
+            "source": "head-framework",
+            "target": "framework-mongodb"
         }
     ]
   }
