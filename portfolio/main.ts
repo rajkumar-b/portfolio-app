@@ -3,14 +3,14 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-import { getJSONdoc } from './utilities';
 import ForceGraph3D, { ForceGraph3DInstance } from '3d-force-graph';
-import { createEmptyGraph, addToGraph, createNodeObject, crossLinkObjects,
+import { getGraphData, createNodeObject, crossLinkObjects,
   highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
   focusNodeOnClick } from './graph-utils';
 
 // const portfolio_content_json = "../res/data/portfolio-content.json";
-const portfolio_graph_framework = "../res/data/portfolio-graph/framework.json";
+const portfolio_graph_data_root = "../res/data/portfolio-graph" 
+const data_folders_to_include: string[] = ["framework"];
 
 // Set control variables for decisive actions
 let animation_controls = {
@@ -32,8 +32,7 @@ const highlight_links = new Set();
 
 
 // Get data for 3d graph
-const portfolio_graph_data = createEmptyGraph();
-addToGraph(portfolio_graph_data, await getJSONdoc(portfolio_graph_framework));
+const portfolio_graph_data = await getGraphData(portfolio_graph_data_root, data_folders_to_include);
 // console.log(portfolio_graph_data);
 crossLinkObjects(portfolio_graph_data);
 
