@@ -4,14 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rajkumar Baskar</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <canvas id="bg" hidden="true"></canvas>
-    <div id="3d-graph"></div>
-    <div id="graph-addon"> 
-      <button id="rotation-toggle"> Free Navigation </button> 
+    <div class="split-buttons">
+      <div class="button" id="timeline-view">
+        <img src="../res/images/icons/timeline.png"/>
+      </div>  
+      <div class="button" id="split-view">
+        <img src="../res/images/icons/split-screen.png"/>
+      </div>   
+      <div class="button" id="graph-view"> 
+        <img src="../res/images/icons/graph.png"/>
+      </div>
     </div>
-    <script type="importmap">{ "imports": { "three": "https://unpkg.com/three/build/three.module.js" }}</script>
+    <div class="main-container">
+      <div id="timeline"> <div> Placeholder </div></div>
+      <div id="three-force-graph"></div>
+      <div id="graph-addon"> 
+        <button id="rotation-toggle"> Free Navigation </button> 
+      </div>
+    </div>
     <script type="module" src="./main.ts"></script>
   </body>
 </html>

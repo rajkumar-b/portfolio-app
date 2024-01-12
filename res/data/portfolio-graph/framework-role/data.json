@@ -3,28 +3,23 @@
     "links": [
         {
             "source": "framework-python",
-            "target": "role-backend",
-            "invisible": true
+            "target": "role-backend"
         },
         {
             "source": "framework-java",
-            "target": "role-backend",
-            "invisible": true
+            "target": "role-backend"
         },
         {
             "source": "framework-sql",
-            "target": "role-backend",
-            "invisible": true
+            "target": "role-backend"
         },
         {
             "source": "framework-git",
-            "target": "role-backend",
-            "invisible": true
+            "target": "role-backend"
         },
         {
             "source": "framework-reactjs",
-            "target": "role-frontend",
-            "invisible": true
+            "target": "role-frontend"
         }
     ]
   }
