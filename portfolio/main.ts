@@ -1,4 +1,3 @@
-import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
@@ -40,12 +39,14 @@ portfolio_graph_data.nodes.forEach(node => {if (node.id && (node.id as string).s
 crossLinkObjects(portfolio_graph_data);
 
 // Construct 3d graph
-const canvas_element = document.getElementById('3d-graph')!;
+const graph_view = document.getElementById('three-force-graph')!  as HTMLCanvasElement;
+const timeline_view = document.getElementById('timeline')! as HTMLCanvasElement;
+
 const portfolio_graph:ForceGraph3DInstance = ForceGraph3D({
   extraRenderers: [new CSS2DRenderer() as any]
-})(canvas_element)
+})(graph_view)
   .graphData(portfolio_graph_data)
-  .backgroundColor('#000003')
+  .backgroundColor('#000003').width(graph_view.clientWidth).height(graph_view.clientHeight).nodeLabel('').showNavInfo(false)
   .nodeColor(node => handleNodeColorChange(node, highlight_nodes, animation_controls))
   .linkWidth(link => highlight_links.has(link) ? 4 : 1)
   .linkDirectionalParticles(link => highlight_links.has(link) ? 4 : 0)
@@ -86,5 +87,81 @@ document.getElementById('rotation-toggle')!.addEventListener('click', event => {
 });
 
 // Postprocessing - Add Glow
-const bloom_pass = new UnrealBloomPass( new THREE.Vector2(window.innerWidth, window.innerHeight), 2, 1, 0 );
+const bloom_pass = new UnrealBloomPass( new THREE.Vector2(window.innerWidth/2, window.innerHeight), 2, 1, 0 );
 portfolio_graph.postProcessingComposer().addPass(bloom_pass);
+
+// Update logic for view / container on resize
+const mainContainer = document.querySelector('.main-container')! as HTMLCanvasElement;
+const graph_support_element = document.getElementById('graph-addon')! as HTMLCanvasElement;
+const split_buttons = document.querySelector('.split-buttons')! as HTMLCanvasElement;
+
+function updateGraphWindow(width: number, height: number){
+  graph_view.style.width = `${width}px`;
+  graph_view.style.height = `${height}px`;
+  portfolio_graph.width(width).height(height);
+  bloom_pass.resolution.set(width, height);
+}
+
+function updateTimelineWindow(width: number, height: number){
+  timeline_view.style.width = `${width}px`;
+  timeline_view.style.height = `${height}px`;
+}
+
+function updateContainerWindow(width: number, height: number, flex: string = 'row'){
+  mainContainer.style.width = `${width}px`;
+  mainContainer.style.height = `${height}px`;
+  mainContainer.style.flexDirection = flex;
+}
+
+function updateStyles() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  if (split_view_active){
+    if ( width > height){
+      updateTimelineWindow(width/2, height);
+      updateGraphWindow(width/2, height);
+      updateContainerWindow(width, height, 'row');
+    } else {
+      updateTimelineWindow(width, height/2);
+      updateGraphWindow(width, height/2);
+      updateContainerWindow(width, height, 'column');
+    }
+  } else {
+    updateGraphWindow(width, height);
+    updateTimelineWindow(width, height);
+  }
+}
+
+// Handle view toggle
+let split_view_active = true;
+
+function toggleView(buttonId: string) {
+  if(buttonId === 'timeline-view'){
+    timeline_view.style.display = "block";
+    graph_view.style.display = "none";
+    graph_support_element.style.display = "none";
+    split_view_active = false;
+  } else if(buttonId === 'graph-view') {
+    timeline_view.style.display = "none";
+    graph_view.style.display = "block";
+    graph_support_element.style.display = "block";
+    split_view_active = false;
+  } else {
+    timeline_view.style.display = "block";
+    graph_view.style.display = "block";
+    graph_support_element.style.display = "block";
+    split_view_active = true;
+  }
+  updateStyles();
+}
+
+// Add event listener to the container
+split_buttons.addEventListener('click', (event) => {
+  const clickedElement = event.target as HTMLElement;
+  const buttonElement = clickedElement.closest('.button');
+  if (buttonElement) toggleView(buttonElement.id);
+});
+
+// Update styles on resize & on start
+window.addEventListener('resize', updateStyles);
+updateStyles();
