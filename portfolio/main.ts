@@ -179,7 +179,7 @@ function toggleView(buttonId: string) {
       document.getElementById('exit-fullscreen')!.style.display = "none";
       fullscreen_active = false;
     }
-  } if(buttonId === 'timeline-view'){
+  } else if(buttonId === 'timeline-view'){
     timeline_view.style.display = "block";
     graph_view.style.display = "none";
     graph_support_element.style.display = "none";
