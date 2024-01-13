@@ -91,7 +91,7 @@ const bloom_pass = new UnrealBloomPass( new THREE.Vector2(window.innerWidth/2, w
 portfolio_graph.postProcessingComposer().addPass(bloom_pass);
 
 // Update logic for view / container on resize
-const mainContainer = document.querySelector('.main-container')! as HTMLCanvasElement;
+const main_container = document.querySelector('.main-container')! as HTMLCanvasElement;
 const graph_support_element = document.getElementById('graph-addon')! as HTMLCanvasElement;
 const split_buttons = document.querySelector('.split-buttons')! as HTMLCanvasElement;
 
@@ -108,9 +108,9 @@ function updateTimelineWindow(width: number, height: number){
 }
 
 function updateContainerWindow(width: number, height: number, flex: string = 'row'){
-  mainContainer.style.width = `${width}px`;
-  mainContainer.style.height = `${height}px`;
-  mainContainer.style.flexDirection = flex;
+  main_container.style.width = `${width}px`;
+  main_container.style.height = `${height}px`;
+  main_container.style.flexDirection = flex;
 }
 
 function updateStyles() {
@@ -132,11 +132,54 @@ function updateStyles() {
   }
 }
 
+function enterFullscreen() {
+  const fullscreenElement = document.documentElement as any;
+  if (fullscreenElement.requestFullscreen) {
+      fullscreenElement.requestFullscreen();
+  } else if (fullscreenElement.webkitRequestFullscreen) {
+    fullscreenElement.webkitRequestFullscreen();
+  } else if (fullscreenElement.mozRequestFullScreen) {
+      fullscreenElement.mozRequestFullScreen();
+  } else if (fullscreenElement.msRequestFullscreen) {
+      fullscreenElement.msRequestFullscreen();
+  } else {
+    alert("Fullscreen not supported in your device!");
+  }
+}
+
+function exitFullscreen() {
+  const fullscreenElement = document as any;
+  if (fullscreenElement.exitFullscreen) {
+    fullscreenElement.exitFullscreen();
+  } else if (fullscreenElement.webkitExitFullscreen) {
+    fullscreenElement.webkitExitFullscreen();
+  } else if (fullscreenElement.mozCancelFullScreen) {
+    fullscreenElement.mozCancelFullScreen();
+  } else if (fullscreenElement.msExitFullscreen) {
+    fullscreenElement.msExitFullscreen();
+  } else {
+    alert("Fullscreen not supported in your device!");
+  }
+}
+
 // Handle view toggle
 let split_view_active = true;
+let fullscreen_active = false;
 
 function toggleView(buttonId: string) {
-  if(buttonId === 'timeline-view'){
+  if(buttonId === 'fullscreen-view'){
+    if (!fullscreen_active){
+      enterFullscreen();
+      document.getElementById('go-fullscreen')!.style.display = "none";
+      document.getElementById('exit-fullscreen')!.style.display = "block";
+      fullscreen_active = true;
+    } else {
+      exitFullscreen();
+      document.getElementById('go-fullscreen')!.style.display = "block";
+      document.getElementById('exit-fullscreen')!.style.display = "none";
+      fullscreen_active = false;
+    }
+  } if(buttonId === 'timeline-view'){
     timeline_view.style.display = "block";
     graph_view.style.display = "none";
     graph_support_element.style.display = "none";
