@@ -3,11 +3,13 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import ForceGraph3D, { ForceGraph3DInstance } from '3d-force-graph';
+import { getJSONdoc } from './utilities';
+import { createTimelineItem } from './timeline-utils';
 import { getGraphData, createNodeObject, crossLinkObjects, addInvisibleNeighbors,
   highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
   focusNodeOnClick } from './graph-utils';
 
-// const portfolio_content_json = "../res/data/portfolio-content.json";
+const portfolio_content_json = "../res/data/portfolio-content.json";
 const portfolio_graph_data_root = "../res/data/portfolio-graph" 
 const data_folders_to_include: string[] = ["framework", "role"];
 const data_folders_to_sublink: string[] = ["framework-role"];
@@ -32,16 +34,92 @@ const highlight_links = new Set();
 const head_nodes = new Set<string>();
 
 
+// Get HTML elements
+const graph_view = document.getElementById('three-force-graph')!  as HTMLCanvasElement;
+const timeline_view = document.getElementById('timeline')! as HTMLCanvasElement;
+const timeline_container = document.querySelector('.timeline-container')! as HTMLCanvasElement;
+
+// Get data for 2d timeline
+const portfolio_content_data = await getJSONdoc(portfolio_content_json);
+const timelineData = [
+  {
+      text: 'Wrote my first blog post ever on Medium',
+      date: 'March 03 2017',
+      category: {
+          tag: 'medium',
+          color: '#018f69'
+      },
+      link: {
+          url:
+              'https://example.com',
+          text: 'Read more'
+      }
+  },
+  {
+    text: 'Wrote my second blog post on Medium',
+    date: 'April 05 2018',
+    category: {
+        tag: 'medium',
+        color: '#018f69'
+    },
+    link: {
+        url:
+            'https://example.com',
+        text: 'Read more'
+    }
+  },
+  {
+    text: 'Wrote my second blog post on Medium',
+    date: 'April 05 2018',
+    category: {
+        tag: 'medium',
+        color: '#018f69'
+    },
+    link: {
+        url:
+            'https://example.com',
+        text: 'Read more'
+    }
+  },
+  {
+    text: 'Wrote my second blog post on Medium',
+    date: 'April 05 2018',
+    category: {
+        tag: 'medium',
+        color: '#018f69'
+    },
+    link: {
+        url:
+            'https://example.com',
+        text: 'Read more'
+    }
+  },
+  {
+    text: 'Wrote my second blog post on Medium',
+    date: 'April 05 2018',
+    category: {
+        tag: 'medium',
+        color: '#018f69'
+    },
+    link: {
+        url:
+            'https://example.com',
+        text: 'Read more'
+    }
+  }
+];
+timelineData.map((data, idx) => {
+  const timelineItem = createTimelineItem(data);
+  timeline_container.appendChild(timelineItem);
+});
+
+
 // Get data for 3d graph
 const portfolio_graph_data = await getGraphData(portfolio_graph_data_root, data_folders_to_include);
 portfolio_graph_data.nodes.forEach(node => {if (node.id && (node.id as string).startsWith('head-')) head_nodes.add(`${node.id}`);});
-// console.log(portfolio_graph_data);
 crossLinkObjects(portfolio_graph_data);
 
 // Construct 3d graph
-const graph_view = document.getElementById('three-force-graph')!  as HTMLCanvasElement;
-const timeline_view = document.getElementById('timeline')! as HTMLCanvasElement;
-
 const portfolio_graph:ForceGraph3DInstance = ForceGraph3D({
   extraRenderers: [new CSS2DRenderer() as any]
 })(graph_view)
