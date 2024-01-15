@@ -93,10 +93,10 @@ body {
 
   .contact-container .contact-holder .profile-pic {
     border-radius: 50%;
-    height: 50vh;
-    width: 50vh;
+    height: 30vh;
+    width: 30vh;
     margin-bottom: 3%;
-    transform: translateX(10%);
+    align-self: center;
   }
 }
 
