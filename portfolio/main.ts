@@ -157,8 +157,16 @@ control_beacon.addEventListener( 'change', () => {
   }
 });
 
-// start animaition
-animateLoop(portfolio_graph, control_beacon, animation_controls, highlight_links, Array.from(head_nodes));
+// start animation
+let loopFunc: number | undefined;
+function startAnimation() {
+  animation_controls.reset_needed = false;
+  loopFunc = animateLoop(portfolio_graph, control_beacon, animation_controls, highlight_links, Array.from(head_nodes));
+}
+function stopAnimation() {
+  clearInterval(loopFunc);
+}
+startAnimation();
 
 // Button toggle
 document.getElementById('rotation-toggle')!.addEventListener('click', event => {
@@ -207,6 +215,7 @@ function updateStyles() {
       updateContainerWindow(width, height, 'column');
     }
   } else {
+    updateContainerWindow(width, height);
     updateGraphWindow(width, height);
     updateTimelineWindow(width, height);
   }
@@ -245,6 +254,7 @@ function exitFullscreen() {
 // Handle view toggle
 let split_view_active = true;
 let fullscreen_active = false;
+let graph_forced_pause = false;
 
 function toggleView(buttonId: string) {
   if(buttonId === 'fullscreen-view'){
@@ -264,16 +274,31 @@ function toggleView(buttonId: string) {
     graph_view.style.display = "none";
     graph_support_element.style.display = "none";
     split_view_active = false;
+    if (animation_controls.is_rotation_active) {
+      graph_forced_pause = true;
+      animation_controls.is_rotation_active = false;
+      stopAnimation();
+    }
   } else if(buttonId === 'graph-view') {
     timeline_view.style.display = "none";
     graph_view.style.display = "block";
     graph_support_element.style.display = "block";
     split_view_active = false;
+    if (graph_forced_pause) {
+      graph_forced_pause = false;
+      animation_controls.is_rotation_active = true;
+      startAnimation();
+    }
   } else {
     timeline_view.style.display = "block";
     graph_view.style.display = "block";
     graph_support_element.style.display = "block";
     split_view_active = true;
+    if (graph_forced_pause) {
+      graph_forced_pause = false;
+      animation_controls.is_rotation_active = true;
+      startAnimation();
+    }
   }
   updateStyles();
 }
