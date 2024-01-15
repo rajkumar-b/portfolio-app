@@ -1,4 +1,19 @@
 {
+    "contact": {
+        "profile_img": "profile/profile.jpg",
+        "first_name": "Rajkumar", 
+        "last_name": "Baskar",
+        "current_location": "Allston, MA",
+        "location_coords": "6+Barrows+St,+Allston,+MA+02134",
+        "headline": "AI Enthusiast, Software Developer, MTB rider & Otaku",
+        "contact_links": {
+            "mobile":{ "link": "tel:+1617-238-4696", "text" : "(617) 238-4696"},
+            "northeastern": { "link": "mailto:baskar.r@northeastern.edu", "text" : "baskar.r"},
+            "gmail": { "link": "mailto:rajkumarneville@gmail.com", "text" : "rajkumarneville"},
+            "github": { "link": "https://github.com/rajkumar-b", "text" : "rajkumar-b"},
+            "linkedin": { "link": "https://www.linkedin.com/in/rajkumarneville/", "text" : "rajkumarneville"}
+        }
+    },
     "Education" : {
         "Traditional": [
             {
