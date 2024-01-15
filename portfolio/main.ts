@@ -162,9 +162,11 @@ let loopFunc: number | undefined;
 function startAnimation() {
   animation_controls.reset_needed = false;
   loopFunc = animateLoop(portfolio_graph, control_beacon, animation_controls, highlight_links, Array.from(head_nodes));
+  portfolio_graph.resumeAnimation();
 }
 function stopAnimation() {
   clearInterval(loopFunc);
+  portfolio_graph.pauseAnimation();
 }
 startAnimation();
 
