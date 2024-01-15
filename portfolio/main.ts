@@ -207,6 +207,7 @@ function updateStyles() {
       updateContainerWindow(width, height, 'column');
     }
   } else {
+    updateContainerWindow(width, height);
     updateGraphWindow(width, height);
     updateTimelineWindow(width, height);
   }
