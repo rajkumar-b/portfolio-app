@@ -72,6 +72,7 @@ body {
   display: flex;
   margin: 3%;
   justify-content: center; 
+  container-type: inline-size;
 }
 
 .contact-container .contact-holder {
@@ -81,6 +82,22 @@ body {
   justify-content: space-between;
   padding: 20px;
   height:  20vh;
+}
+
+@container (max-width: 700px) {
+  .contact-container .contact-holder {
+    flex-direction: column; 
+    height: auto;
+    padding-right: 0%;
+  }
+
+  .contact-container .contact-holder .profile-pic {
+    border-radius: 50%;
+    height: 50vh;
+    width: 50vh;
+    margin-bottom: 3%;
+    transform: translateX(10%);
+  }
 }
 
 .contact-container .contact-holder .profile-pic {
@@ -104,13 +121,13 @@ body {
 
 .contact-container .contact-holder .profile-details .current-location img{
   width: 20px; 
-  margin-right: 5px;
   transform: translateY(10%);
 }
 
 .contact-container .contact-holder .profile-details .current-location a, 
 .contact-container .contact-holder .profile-details .current-location a:visited{
   text-decoration: none;
+  margin-left: 5px;
   color: rgb(151, 213, 213);
 }
 
@@ -121,7 +138,7 @@ body {
   font-size: 2rem;
   margin-top: 2%;
   margin-bottom: 0%;
-  padding-right: 3rem;
+  padding-right: 3%;
 }
 
 .contact-container .contact-holder .profile-details .profile-headline{
