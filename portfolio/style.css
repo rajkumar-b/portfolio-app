@@ -66,6 +66,99 @@ body {
   user-select: none;
 }
 
+.contact-container {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  margin: 3%;
+  justify-content: center; 
+}
+
+.contact-container .contact-holder {
+  background: rgba(229, 206, 206, 0.1);
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  padding: 20px;
+  height:  20vh;
+}
+
+.contact-container .contact-holder .profile-pic {
+  border-radius: 50%;
+}
+
+.contact-container .contact-holder .profile-details {
+  margin-left: 5%;
+  height: 100%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Cera Round Pro';
+}
+
+.contact-container .contact-holder .profile-details .current-location{
+  text-wrap: nowrap;
+  font-style: italic;
+  color: rgb(151, 213, 213);
+}
+
+.contact-container .contact-holder .profile-details .current-location img{
+  width: 20px; 
+  margin-right: 5px;
+  transform: translateY(10%);
+}
+
+.contact-container .contact-holder .profile-details .current-location a, 
+.contact-container .contact-holder .profile-details .current-location a:visited{
+  text-decoration: none;
+  color: rgb(151, 213, 213);
+}
+
+.contact-container .contact-holder .profile-details .profile-name{
+  text-wrap: nowrap;
+  font-weight: bold;
+  color: #eee;
+  font-size: 2rem;
+  margin-top: 2%;
+  margin-bottom: 0%;
+  padding-right: 3rem;
+}
+
+.contact-container .contact-holder .profile-details .profile-headline{
+  text-wrap: wrap;
+  color: #fff;
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+.contact-container .contact-holder .profile-links {
+  margin-left: 5%;
+  height: 100%;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Cera Round Pro';
+}
+
+
+.contact-container .contact-holder .profile-links .contact-link{
+  text-wrap: nowrap;
+  color: rgb(151, 213, 213);
+  margin-top: 2%;
+}
+
+.contact-container .contact-holder .profile-links .contact-link img{
+  width: 20px; 
+  margin-right: 10px;
+  transform: translateY(20%);
+}
+
+.contact-container .contact-holder .profile-links .contact-link a, 
+.contact-container .contact-holder .profile-links .contact-link a:visited{
+  text-decoration: none;
+  color: rgb(151, 213, 213);
+}
+
 .timeline-container {
   display: flex;
   flex-direction: column;

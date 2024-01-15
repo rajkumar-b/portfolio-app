@@ -4,7 +4,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { CSS2DRenderer} from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import ForceGraph3D, { ForceGraph3DInstance } from '3d-force-graph';
 import { getJSONdoc } from './utilities';
-import { createTimelineItem } from './timeline-utils';
+import { createContactCard, createTimelineItem } from './timeline-utils';
 import { getGraphData, createNodeObject, crossLinkObjects, addInvisibleNeighbors,
   highlightNodeOnHover, highlightLinkOnHover, handleNodeColorChange, animateLoop, 
   focusNodeOnClick } from './graph-utils';
@@ -37,10 +37,12 @@ const head_nodes = new Set<string>();
 // Get HTML elements
 const graph_view = document.getElementById('three-force-graph')!  as HTMLCanvasElement;
 const timeline_view = document.getElementById('timeline')! as HTMLCanvasElement;
+const contact_container = document.querySelector('.contact-container')! as HTMLCanvasElement;
 const timeline_container = document.querySelector('.timeline-container')! as HTMLCanvasElement;
 
 // Get data for 2d timeline
-const portfolio_content_data = await getJSONdoc(portfolio_content_json);
+const portfolio_content_data: any = await getJSONdoc(portfolio_content_json);
+contact_container.appendChild(createContactCard(portfolio_content_data.contact));
 const timelineData = [
   {
       text: 'Wrote my first blog post ever on Medium',
@@ -52,7 +54,7 @@ const timelineData = [
       link: {
           url:
               'https://example.com',
-          text: 'Read more'
+          text: ''
       }
   },
   {
