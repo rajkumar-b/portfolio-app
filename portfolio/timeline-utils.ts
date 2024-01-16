@@ -75,6 +75,18 @@ function createContactCard(data: any){
     return contactCard;
 }
 
+function getDate(date: any): Date {
+    const current_date = new Date();
+    return date? new Date(date.year? Number(date.year): current_date.getFullYear(), 
+    date.month? Number(date.month) - 1: 0, 
+    date.day? Number(date.day): 1): current_date;
+}
+
+function getTypeBasedContent(data: any): string {
+    if (!data.type) return "";
+    if (data.type === 'college') return `Attended <b>${data.university? data.university: 'University'}</b> in pursuit of ${data.degree? data.degree: 'Degree'} in ${data.specialization? data.specialization: 'Specialization'}`;
+    return "";
+}
 
 function createTimelineItem(data: any) {
     const timelineItem = document.createElement('div');
@@ -85,14 +97,16 @@ function createTimelineItem(data: any) {
 
     const tag = document.createElement('span');
     tag.className = 'tag';
-    tag.style.background = data.category.color;
-    tag.textContent = data.category.tag;
+    tag.textContent = data.tag? data.tag: "Milestone";
+    tag.style.background = data.tag_color? data.tag_color: 'grey';
 
     const time = document.createElement('time');
-    time.textContent = data.date;
+    const start_date: Date = getDate(data.start_date);
+
+    time.textContent = start_date.toLocaleString('default', { month: 'long' , year:'numeric'});;
 
     const text = document.createElement('p');
-    text.textContent = data.text;
+    text.innerHTML = getTypeBasedContent(data);
 
     const circle = document.createElement('span');
     circle.className = 'circle';
