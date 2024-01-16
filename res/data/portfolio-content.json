@@ -14,12 +14,18 @@
             "linkedin": { "link": "https://www.linkedin.com/in/rajkumarneville/", "text" : "rajkumarneville"}
         }
     },
-    "Education" : {
-        "Traditional": [
+    "timeline" : {
+        "education": [
             {
-                "_name": "Masters",
-                "year_start": 2021,
-                "year_end": 2023,
+                "tag": "Masters",
+                "tag_color": "red",
+                "start_date": {
+                    "year" : 2021,
+                    "month": 9
+                }, 
+                "end_date": {
+                    "year" : 2023
+                },
                 "type": "college",
                 "country": "US",
                 "state": "MA",
@@ -31,9 +37,15 @@
                 "degree_abbr": "MS AI"
             },
             {
-                "_name": "Bachelors",
-                "year_start": 2010,
-                "year_end": 2014,
+                "tag": "Bachelors",
+                "tag_color": "blue",
+                "start_date": {
+                    "year" : 2010,
+                    "month": 9
+                }, 
+                "end_date": {
+                    "year" : 2014
+                },
                 "type": "college",
                 "country": "India",
                 "state": "PY",
@@ -45,7 +57,7 @@
                 "degree_abbr": "B.Tech (ECE)"
             }
         ],
-        "Online Courses": [],
-        "Self Taught": []
+        "online-courses": [],
+        "self-learning": []
     }
 }
