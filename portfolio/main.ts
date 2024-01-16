@@ -43,77 +43,25 @@ const timeline_container = document.querySelector('.timeline-container')! as HTM
 // Get data for 2d timeline
 const portfolio_content_data: any = await getJSONdoc(portfolio_content_json);
 contact_container.appendChild(createContactCard(portfolio_content_data.contact));
-const timelineData = [
-  {
-      text: 'Wrote my first blog post ever on Medium',
-      date: 'March 03 2017',
-      category: {
-          tag: 'medium',
-          color: '#018f69'
-      },
-      link: {
-          url:
-              'https://example.com',
-          text: ''
-      }
-  },
-  {
-    text: 'Wrote my second blog post on Medium',
-    date: 'April 05 2018',
-    category: {
-        tag: 'medium',
-        color: '#018f69'
-    },
-    link: {
-        url:
-            'https://example.com',
-        text: 'Read more'
-    }
-  },
-  {
-    text: 'Wrote my second blog post on Medium',
-    date: 'April 05 2018',
-    category: {
-        tag: 'medium',
-        color: '#018f69'
-    },
-    link: {
-        url:
-            'https://example.com',
-        text: 'Read more'
-    }
-  },
-  {
-    text: 'Wrote my second blog post on Medium',
-    date: 'April 05 2018',
-    category: {
-        tag: 'medium',
-        color: '#018f69'
-    },
-    link: {
-        url:
-            'https://example.com',
-        text: 'Read more'
-    }
-  },
-  {
-    text: 'Wrote my second blog post on Medium',
-    date: 'April 05 2018',
-    category: {
-        tag: 'medium',
-        color: '#018f69'
-    },
-    link: {
-        url:
-            'https://example.com',
-        text: 'Read more'
-    }
+const timeline_data = {};
+for (const category in portfolio_content_data.timeline){
+  const category_data: HTMLDivElement[] = [];
+  portfolio_content_data.timeline[category].forEach((data: any) => {
+    category_data.push(createTimelineItem(data));
+  });
+  timeline_data[category] = category_data;
+}
+
+function updateTimelineContent(categories: string[] = []){
+  categories.push('general');
+  const unique_categories = [...new Set(categories)];
+  const timeline_items: HTMLDivElement[] = [];
+  for (const category of unique_categories) {
+    if (category in timeline_data) timeline_data[category].forEach((item: HTMLDivElement) => {timeline_items.push(item);});
   }
-];
-timelineData.map((data, idx) => {
-  const timelineItem = createTimelineItem(data);
-  timeline_container.appendChild(timelineItem);
-});
+  timeline_items.forEach((item) => timeline_container.appendChild(item));
+}
+updateTimelineContent(Object.keys(timeline_data));
 
 
 // Get data for 3d graph
