@@ -73,6 +73,7 @@ body {
   margin: 3%;
   justify-content: center; 
   container-type: inline-size;
+  container-name: contact-card;
 }
 
 .contact-container .contact-holder {
@@ -84,7 +85,11 @@ body {
   height:  20vh;
 }
 
-@container (max-width: 700px) {
+.contact-container .contact-holder .profile-pic {
+  border-radius: 50%;
+}
+
+@container contact-card (max-width: 767px) {
   .contact-container .contact-holder {
     flex-direction: column; 
     height: auto;
@@ -97,10 +102,6 @@ body {
     margin-bottom: 3%;
     align-self: center;
   }
-}
-
-.contact-container .contact-holder .profile-pic {
-  border-radius: 50%;
 }
 
 .contact-container .contact-holder .profile-details {
@@ -180,6 +181,8 @@ body {
   flex-direction: column;
   position: relative;
   margin: 40px 0;
+  container-type: inline-size;
+  container-name: timeline;
 }
 
 /* separating line */
@@ -302,13 +305,13 @@ body {
   left: -40px;
 }
 
-@media only screen and (max-width: 1023px) {
+@container timeline (max-width: 1023px) {
   .timeline-item-content {
-      max-width: 100%;
+      max-width: 80%;
   }
 }
 
-@media only screen and (max-width: 767px) {
+@container timeline (max-width: 767px) {
   .timeline-item-content,
   .timeline-item:nth-child(odd) .timeline-item-content {
       padding: 15px 10px;
